@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="ai — bot">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0FBFD"/><stop offset="1" stop-color="#B6F4FF"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#15D3DC" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#15D3DC" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#15D3DC" opacity=".32"/><rect x="101" y="46" width="447" height="275" rx="105" fill="#B6F4FF" opacity=".7"/>
+ <g transform="translate(64 34) scale(0.8)"><rect x="199" y="112" width="228" height="154" rx="48" fill="#F0FBFD" stroke="#166AF2" stroke-width="13"/><rect x="272" y="81" width="70" height="36" rx="13" fill="#15D3DC" stroke="#166AF2" stroke-width="8"/><rect x="245" y="162" width="46" height="31" rx="15" fill="#15D3DC"/><rect x="338" y="162" width="46" height="31" rx="15" fill="#15D3DC"/><path d="M266 224 Q316 249 366 224" stroke="#166AF2" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#166AF2" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="marketplace — cart">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1F4"/><stop offset="1" stop-color="#FFD5D6"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#FFBF55" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#FFBF55" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#FFBF55" opacity=".32"/><rect x="96" y="45" width="444" height="270" rx="48" fill="#FFD5D6" opacity=".65"/>
+ <g transform="translate(64 34) scale(0.8)"><path d="M174 113 H226 L259 241 H429 L463 151 H244" fill="none" stroke="#FF6682" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="291" cy="277" r="21" fill="#FFBF55" stroke="#FF6682" stroke-width="10"/><circle cx="409" cy="277" r="21" fill="#FFBF55" stroke="#FF6682" stroke-width="10"/><path d="M283 173 H418" stroke="#FFBF55" stroke-width="20"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#FF6682" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

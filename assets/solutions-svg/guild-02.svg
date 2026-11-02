@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="guild — mentor">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3FFF2"/><stop offset="1" stop-color="#D7FCE7"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#BAF65A" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#BAF65A" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#BAF65A" opacity=".32"/><path d="M93 275 C116 105 275 71 466 80 C589 88 594 262 517 291 C354 360 144 353 93 275Z" fill="#D7FCE7" opacity=".85"/>
+ <g transform="translate(64 34) scale(0.8)"><circle cx="250" cy="135" r="48" fill="#BAF65A" stroke="#28B48D" stroke-width="10"/><path d="M173 288 Q178 210 254 210 Q327 211 332 288" fill="#F3FFF2" stroke="#28B48D" stroke-width="10"/><path d="M380 82 L398 122 L444 126 L407 157 L419 202 L380 179 L341 202 L352 157 L318 126 L361 122 Z" fill="#BAF65A" stroke="#28B48D" stroke-width="9"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#28B48D" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

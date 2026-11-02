@@ -1,0 +1,105 @@
+name: ZaMaGui - Safe deployment preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-prod-audit
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Validate source and dry-run remote sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Validate source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s index.html
+          test -s ecosystem.html
+          test -d assets
+
+          if find . -type f \
+            \( -name '.env' -o -name '.env.*' \
+               -o -name '*.pem' -o -name 'id_rsa' \) \
+            -not -path './.git/*' | grep -q .; then
+            echo 'Potential secret files found'
+            exit 1
+          fi
+
+          echo 'Source validation passed'
+
+      - name: Configure SSH
+        shell: bash
+        env:
+          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+
+          printf '%s\n' "$DEPLOY_KEY" \
+            > "$HOME/.ssh/zamagui_deploy"
+
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" \
+            > "$HOME/.ssh/known_hosts"
+
+          chmod 600 "$HOME/.ssh/zamagui_deploy"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+          ssh-keygen -y -P '' \
+            -f "$HOME/.ssh/zamagui_deploy" >/dev/null
+
+          ssh-keygen -F "[$SSH_HOST]:$SSH_PORT" \
+            -f "$HOME/.ssh/known_hosts" >/dev/null
+
+          echo 'SSH configuration verified'
+
+      - name: Verify HOSTiQ and preview changes
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          export LANG=C LC_ALL=C
+
+          SSH_CMD="ssh -F /dev/null -i $HOME/.ssh/zamagui_deploy -p $SSH_PORT -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
+
+          $SSH_CMD -n "$SSH_USER@$SSH_HOST" \
+            'test -f /home4/dataforg/zamagui.com/index.html && command -v rsync >/dev/null && echo REMOTE_OK'
+
+          rsync -avzn --stats --itemize-changes \
+            -e "$SSH_CMD" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.env*' \
+            --exclude='*.pem' \
+            --exclude='.DS_Store' \
+            --exclude='.gitattributes' \
+            --exclude='README.md' \
+            --exclude='LICENSE' \
+            --exclude='node_modules/' \
+            --exclude='docs/' \
+            --exclude='tests/' \
+            --exclude='scripts/' \
+            --exclude='api/' \
+            --exclude='business-zamagui/' \
+            --exclude='beta/' \
+            --exclude='.htaccess' \
+            ./ "$SSH_USER@$SSH_HOST:/home4/dataforg/zamagui.com/"
+
+          echo 'DRY RUN: Production unchanged'

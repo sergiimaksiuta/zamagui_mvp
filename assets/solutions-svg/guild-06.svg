@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="guild — badge">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3FFF2"/><stop offset="1" stop-color="#D7FCE7"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#BAF65A" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#BAF65A" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#BAF65A" opacity=".32"/><rect x="101" y="46" width="447" height="275" rx="105" fill="#D7FCE7" opacity=".7"/>
+ <g transform="translate(64 34) scale(0.8)"><circle cx="310" cy="162" r="90" fill="#F3FFF2" stroke="#28B48D" stroke-width="12"/><path d="M246 232 L217 311 L302 285 L320 253 L335 288 L409 310 L373 231" fill="#BAF65A" stroke="#28B48D" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M310 105 L331 144 L376 151 L342 183 L349 230 L310 210 L270 230 L278 183 L242 151 L289 144 Z" fill="#BAF65A"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#28B48D" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

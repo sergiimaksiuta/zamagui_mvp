@@ -1,0 +1,534 @@
+{
+  "nodes": [
+    {
+      "id": "growth",
+      "label": "Розвиток бізнесу",
+      "labels": {
+        "uk": "Розвиток бізнесу",
+        "en": "Business growth",
+        "ru": "Развитие бизнеса"
+      },
+      "type": "growth",
+      "page": "growth",
+      "x": 205,
+      "y": 110
+    },
+    {
+      "id": "kids",
+      "label": "Освіта дітей",
+      "labels": {
+        "uk": "Освіта дітей",
+        "en": "Kids education",
+        "ru": "Детское образование"
+      },
+      "type": "kids",
+      "page": "kids",
+      "x": 545,
+      "y": 110
+    },
+    {
+      "id": "ai",
+      "label": "Технології та AI",
+      "labels": {
+        "uk": "Технології та AI",
+        "en": "AI and technology",
+        "ru": "Технологии и AI"
+      },
+      "type": "ai",
+      "page": "ai",
+      "x": 885,
+      "y": 110
+    },
+    {
+      "id": "guild",
+      "label": "Гільдія майстрів",
+      "labels": {
+        "uk": "Гільдія майстрів",
+        "en": "Mastery Guild",
+        "ru": "Гильдия мастеров"
+      },
+      "type": "guild",
+      "page": "guild",
+      "x": 1225,
+      "y": 110
+    },
+    {
+      "id": "marketplace",
+      "label": "Послуги фахівців",
+      "labels": {
+        "uk": "Послуги фахівців",
+        "en": "Expert marketplace",
+        "ru": "Маркетплейс услуг"
+      },
+      "type": "marketplace",
+      "page": "marketplace",
+      "x": 205,
+      "y": 255
+    },
+    {
+      "id": "capital",
+      "label": "Капітал та активи",
+      "labels": {
+        "uk": "Капітал та активи",
+        "en": "Capital and assets",
+        "ru": "Капитал и активы"
+      },
+      "type": "capital",
+      "page": "capital",
+      "x": 545,
+      "y": 255
+    },
+    {
+      "id": "kids-elite",
+      "label": "Преміальна програма",
+      "labels": {
+        "uk": "Преміальна програма",
+        "en": "Premium learning",
+        "ru": "Премиальная программа"
+      },
+      "type": "kids",
+      "page": "kids-elite",
+      "x": 885,
+      "y": 255
+    },
+    {
+      "id": "kids-talent",
+      "label": "Підтримка талантів",
+      "labels": {
+        "uk": "Підтримка талантів",
+        "en": "Talent support",
+        "ru": "Поддержка талантов"
+      },
+      "type": "kids",
+      "page": "kids-talent",
+      "x": 1225,
+      "y": 255
+    },
+    {
+      "id": "franchise",
+      "label": "Масштабування",
+      "labels": {
+        "uk": "Масштабування",
+        "en": "Franchising",
+        "ru": "Франчайзинг"
+      },
+      "type": "growth",
+      "page": "franchise",
+      "x": 205,
+      "y": 400
+    },
+    {
+      "id": "business-diagnostics",
+      "label": "Бізнес-діагностика",
+      "labels": {
+        "uk": "Бізнес-діагностика",
+        "en": "Business diagnostics",
+        "ru": "Бизнес-диагностика"
+      },
+      "type": "growth",
+      "page": "growth",
+      "x": 545,
+      "y": 400
+    },
+    {
+      "id": "leadership",
+      "label": "Розвиток керівників",
+      "labels": {
+        "uk": "Розвиток керівників",
+        "en": "Leadership development",
+        "ru": "Развитие руководителей"
+      },
+      "type": "growth",
+      "page": "growth",
+      "x": 885,
+      "y": 400
+    },
+    {
+      "id": "growth-hacking",
+      "label": "Growth Hacking",
+      "labels": {
+        "uk": "Growth Hacking",
+        "en": "Growth Hacking",
+        "ru": "Growth Hacking"
+      },
+      "type": "growth",
+      "page": "growth",
+      "x": 1225,
+      "y": 400
+    },
+    {
+      "id": "automation",
+      "label": "AI та автоматизація",
+      "labels": {
+        "uk": "AI та автоматизація",
+        "en": "AI automation",
+        "ru": "AI и автоматизация"
+      },
+      "type": "ai",
+      "page": "ai",
+      "x": 205,
+      "y": 545
+    },
+    {
+      "id": "corporate-academy",
+      "label": "Корпоративна академія",
+      "labels": {
+        "uk": "Корпоративна академія",
+        "en": "Corporate academy",
+        "ru": "Корпоративная академия"
+      },
+      "type": "kids",
+      "page": "programs",
+      "x": 545,
+      "y": 545
+    },
+    {
+      "id": "mentorship",
+      "label": "Наставництво",
+      "labels": {
+        "uk": "Наставництво",
+        "en": "Mentoring",
+        "ru": "Наставничество"
+      },
+      "type": "guild",
+      "page": "experts",
+      "x": 885,
+      "y": 545
+    },
+    {
+      "id": "experts",
+      "label": "Експерти й майстри",
+      "labels": {
+        "uk": "Експерти й майстри",
+        "en": "Experts and craftspeople",
+        "ru": "Эксперты и мастера"
+      },
+      "type": "guild",
+      "page": "experts",
+      "x": 1225,
+      "y": 545
+    },
+    {
+      "id": "career",
+      "label": "Професійний розвиток",
+      "labels": {
+        "uk": "Професійний розвиток",
+        "en": "Career development",
+        "ru": "Развитие карьеры"
+      },
+      "type": "kids",
+      "page": "programs",
+      "x": 205,
+      "y": 690
+    },
+    {
+      "id": "startups",
+      "label": "Бізнес-проєкти",
+      "labels": {
+        "uk": "Бізнес-проєкти",
+        "en": "Business ventures",
+        "ru": "Бизнес-проекты"
+      },
+      "type": "growth",
+      "page": "partners",
+      "x": 545,
+      "y": 690
+    },
+    {
+      "id": "ventures",
+      "label": "Венчурна студія",
+      "labels": {
+        "uk": "Венчурна студія",
+        "en": "Venture studio",
+        "ru": "Венчурная студия"
+      },
+      "type": "capital",
+      "page": "partners",
+      "x": 885,
+      "y": 690
+    },
+    {
+      "id": "fund",
+      "label": "Фонд розвитку",
+      "labels": {
+        "uk": "Фонд розвитку",
+        "en": "Development fund",
+        "ru": "Фонд развития"
+      },
+      "type": "capital",
+      "page": "capital",
+      "x": 1225,
+      "y": 690
+    },
+    {
+      "id": "invest-pilots",
+      "label": "Інвестиційні пілоти",
+      "labels": {
+        "uk": "Інвестиційні пілоти",
+        "en": "Investment pilots",
+        "ru": "Инвестиционные пилоты"
+      },
+      "type": "capital",
+      "page": "capital",
+      "x": 205,
+      "y": 835
+    },
+    {
+      "id": "member-profiles",
+      "label": "Профілі учасників",
+      "labels": {
+        "uk": "Профілі учасників",
+        "en": "Member profiles",
+        "ru": "Профили участников"
+      },
+      "type": "guild",
+      "page": "experts",
+      "x": 545,
+      "y": 835
+    },
+    {
+      "id": "professional-services",
+      "label": "Професійні послуги",
+      "labels": {
+        "uk": "Професійні послуги",
+        "en": "Professional services",
+        "ru": "Профессиональные услуги"
+      },
+      "type": "marketplace",
+      "page": "marketplace",
+      "x": 885,
+      "y": 835
+    },
+    {
+      "id": "family",
+      "label": "Освітні можливості сімей",
+      "labels": {
+        "uk": "Освітні можливості сімей",
+        "en": "Family learning",
+        "ru": "Семейное обучение"
+      },
+      "type": "kids",
+      "page": "kids",
+      "x": 1225,
+      "y": 835
+    },
+    {
+      "id": "certification",
+      "label": "Визнання майстерності",
+      "labels": {
+        "uk": "Визнання майстерності",
+        "en": "Professional recognition",
+        "ru": "Признание мастерства"
+      },
+      "type": "guild",
+      "page": "guild",
+      "x": 205,
+      "y": 980
+    },
+    {
+      "id": "partners",
+      "label": "Партнерські проєкти",
+      "labels": {
+        "uk": "Партнерські проєкти",
+        "en": "Partnerships",
+        "ru": "Партнёрские проекты"
+      },
+      "type": "guild",
+      "page": "partners",
+      "x": 545,
+      "y": 980
+    },
+    {
+      "id": "regional-offices",
+      "label": "Регіональні офіси",
+      "labels": {
+        "uk": "Регіональні офіси",
+        "en": "Regional offices",
+        "ru": "Региональные офисы"
+      },
+      "type": "growth",
+      "page": "franchise",
+      "x": 885,
+      "y": 980
+    },
+    {
+      "id": "international",
+      "label": "Міжнародні зв’язки",
+      "labels": {
+        "uk": "Міжнародні зв’язки",
+        "en": "International networks",
+        "ru": "Международные связи"
+      },
+      "type": "guild",
+      "page": "partners",
+      "x": 1225,
+      "y": 980
+    }
+  ],
+  "edges": [
+    [
+      "growth",
+      "business-diagnostics"
+    ],
+    [
+      "growth",
+      "leadership"
+    ],
+    [
+      "growth",
+      "growth-hacking"
+    ],
+    [
+      "growth",
+      "ai"
+    ],
+    [
+      "growth",
+      "guild"
+    ],
+    [
+      "growth",
+      "capital"
+    ],
+    [
+      "growth",
+      "franchise"
+    ],
+    [
+      "kids",
+      "kids-elite"
+    ],
+    [
+      "kids",
+      "kids-talent"
+    ],
+    [
+      "kids",
+      "corporate-academy"
+    ],
+    [
+      "kids",
+      "career"
+    ],
+    [
+      "kids",
+      "family"
+    ],
+    [
+      "kids",
+      "mentorship"
+    ],
+    [
+      "ai",
+      "automation"
+    ],
+    [
+      "ai",
+      "corporate-academy"
+    ],
+    [
+      "ai",
+      "growth"
+    ],
+    [
+      "ai",
+      "professional-services"
+    ],
+    [
+      "guild",
+      "experts"
+    ],
+    [
+      "guild",
+      "mentorship"
+    ],
+    [
+      "guild",
+      "certification"
+    ],
+    [
+      "guild",
+      "member-profiles"
+    ],
+    [
+      "guild",
+      "partners"
+    ],
+    [
+      "guild",
+      "international"
+    ],
+    [
+      "guild",
+      "marketplace"
+    ],
+    [
+      "marketplace",
+      "professional-services"
+    ],
+    [
+      "marketplace",
+      "experts"
+    ],
+    [
+      "marketplace",
+      "partners"
+    ],
+    [
+      "marketplace",
+      "growth"
+    ],
+    [
+      "capital",
+      "fund"
+    ],
+    [
+      "capital",
+      "invest-pilots"
+    ],
+    [
+      "capital",
+      "ventures"
+    ],
+    [
+      "capital",
+      "startups"
+    ],
+    [
+      "capital",
+      "franchise"
+    ],
+    [
+      "franchise",
+      "regional-offices"
+    ],
+    [
+      "franchise",
+      "international"
+    ],
+    [
+      "partners",
+      "startups"
+    ],
+    [
+      "partners",
+      "international"
+    ],
+    [
+      "startups",
+      "ventures"
+    ],
+    [
+      "kids-elite",
+      "kids-talent"
+    ],
+    [
+      "kids-talent",
+      "career"
+    ],
+    [
+      "experts",
+      "corporate-academy"
+    ]
+  ]
+}

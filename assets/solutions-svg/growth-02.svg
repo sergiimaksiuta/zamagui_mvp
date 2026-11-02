@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="growth — compass">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFF6FF"/><stop offset="1" stop-color="#DCEAFF"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#92F841" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#92F841" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#92F841" opacity=".32"/><path d="M93 275 C116 105 275 71 466 80 C589 88 594 262 517 291 C354 360 144 353 93 275Z" fill="#DCEAFF" opacity=".85"/>
+ <g transform="translate(64 34) scale(0.8)"><circle cx="310" cy="185" r="100" fill="#EFF6FF" stroke="#1058F8" stroke-width="14"/><circle cx="310" cy="185" r="42" fill="none" stroke="#1058F8" stroke-width="10"/><path d="M280 205 L355 125 L335 207 Z" fill="#92F841" stroke="#1058F8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#1058F8" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>
