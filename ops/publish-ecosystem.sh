@@ -57,6 +57,12 @@ for file in "${FILES[@]}"; do
   echo "Verified: https://zamagui.com/$file"
 done
 
+
+echo "Running real Chromium tests against live HTTPS, with rollback still enabled"
+PLAYWRIGHT_TEST_BASE_URL=https://zamagui.com \
+  npx playwright test --config=e2e/playwright.config.cjs
+echo 'Live browser smoke checks: PASS'
+
 ROLLBACK_NEEDED=0
 trap - EXIT
 echo "RELEASE OK: three ecosystem pages published; rollback snapshot retained for run $RUN_ID"
