@@ -1,0 +1,93 @@
+name: ZaMaGui - Source quality gates
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-source-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-qa:
+    name: Validate website source (read only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v6
+
+      - name: Validate required pages and locale files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          required = [
+              "index.html", "ecosystem.html", "assets/app.js",
+              "assets/zm-r11.js", "en/index.html", "ru/index.html",
+              "locales/uk.json", "locales/en.json", "locales/ru.json",
+              "robots.txt", "sitemap.xml",
+          ]
+          for name in required:
+              f = Path(name)
+              if not f.is_file() or f.stat().st_size == 0:
+                  raise SystemExit(f"Missing or empty: {name}")
+          for name in ("index.html", "ecosystem.html", "en/index.html", "ru/index.html"):
+              html = Path(name).read_text(encoding="utf-8")
+              if "<html" not in html.lower() or "<title" not in html.lower():
+                  raise SystemExit(f"Missing HTML root or title: {name}")
+          print(f"Required files validated: {len(required)}")
+          PY
+
+      - name: Validate all tracked JSON files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          names = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
+          files = [Path(n) for n in names if n.endswith(".json")]
+          for f in files:
+              try:
+                  json.loads(f.read_text(encoding="utf-8"))
+              except (ValueError, UnicodeError) as e:
+                  raise SystemExit(f"Invalid JSON {f}: {e}")
+          print(f"JSON validated: {len(files)} files")
+          PY
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          count=0
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+            count=$((count + 1))
+          done < <(find assets -type f -name '*.js' -print0)
+          echo "JS syntax validated: $count files"
+
+      - name: Block obvious secret files from Git
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re, subprocess
+          names = subprocess.check_output(["git", "ls-files", "-z"]).decode().split("\0")
+          unsafe = [
+              n for n in names if n and (
+                  re.search(r"(^|/)(\.env(\..+)?|id_rsa(\.pub)?|id_ed25519(\.pub)?|known_hosts)$", n) or
+                  re.search(r"\.(pem|p12|pfx|key)$", n)
+              )
+          ]
+          if unsafe:
+              raise SystemExit("Potential secret files tracked: " + ", ".join(unsafe))
+          print("No obvious secret-key files tracked")
+          PY
