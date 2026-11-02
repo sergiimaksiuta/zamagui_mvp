@@ -1,0 +1,91 @@
+name: ZaMaGui - Controlled ecosystem release
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_run_id:
+        description: 'Successful encrypted backup GitHub Actions run ID (created <24h ago)'
+        required: true
+        type: string
+      approval:
+        description: 'Type DEPLOY_THREE_ECOSYSTEM_PAGES to authorize the production change'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: zamagui-production-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Deploy only three ecosystem HTML pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v6
+
+      - name: Confirm manually approved release and valid backup
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BACKUP_RUN_ID: ${{ inputs.backup_run_id }}
+          APPROVAL: ${{ inputs.approval }}
+          HOST_VERIFIED: ${{ vars.HOST_FINGERPRINT_VERIFIED }}
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == refs/heads/main ]] || { echo 'Only main branch can deploy'; exit 1; }
+          [[ "$APPROVAL" == DEPLOY_THREE_ECOSYSTEM_PAGES ]] || { echo 'Missing explicit production approval'; exit 1; }
+          [[ "$HOST_VERIFIED" == true ]] || { echo 'Host identity not verified'; exit 1; }
+          [[ "$BACKUP_RUN_ID" =~ ^[0-9]{8,15}$ ]] || { echo 'Invalid backup run ID'; exit 1; }
+          [[ "$(git ls-remote origin refs/heads/main | cut -f1)" == "$GITHUB_SHA" ]] || {
+            echo 'main has advanced; rerun QA, backup and release'; exit 1;
+          }
+
+          BACKUP="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID")"
+          [[ "$(jq -r '.conclusion' <<< "$BACKUP")" == success ]] || { echo 'Backup did not succeed'; exit 1; }
+          [[ "$(jq -r '.name' <<< "$BACKUP")" == 'ZaMaGui - Encrypted offsite backup' ]] || { echo 'Wrong backup workflow'; exit 1; }
+          [[ "$(jq -r '.head_branch' <<< "$BACKUP")" == main ]] || { echo 'Backup not from main'; exit 1; }
+          CREATED="$(jq -r '.created_at' <<< "$BACKUP")"
+          AGE_SECONDS="$(( $(date -u +%s) - $(date -u -d "$CREATED" +%s) ))"
+          (( AGE_SECONDS >= 0 && AGE_SECONDS < 86400 )) || { echo 'Backup older than 24h'; exit 1; }
+          COUNT="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID/artifacts" --jq '[.artifacts[] | select(.expired == false and (.name | startswith("zamagui-encrypted-backup-")))] | length')"
+          (( COUNT > 0 )) || { echo 'No usable encrypted backup artifact'; exit 1; }
+
+          RUNS="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$GITHUB_SHA&per_page=100")"
+          for NAME in 'ZaMaGui - Source quality gates' 'ZaMaGui - Browser smoke QA'; do
+            jq -e --arg name "$NAME" --arg sha "$GITHUB_SHA" \
+              '[.workflow_runs[] | select(.name == $name and .head_sha == $sha and .conclusion == "success")] | length > 0' \
+              <<< "$RUNS" >/dev/null || { echo "QA not successful for current main: $NAME"; exit 1; }
+          done
+          echo 'Approval, verified host, encrypted backup, and both QA checks: VERIFIED'
+
+      - name: Setup pinned SSH
+        shell: bash
+        env:
+          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -euo pipefail
+          umask 077
+          [[ -n "$DEPLOY_KEY" && -n "$KNOWN_HOSTS" && -n "$SSH_HOST" && -n "$SSH_PORT" ]] || exit 1
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_KEY" > "$HOME/.ssh/zamagui_deploy"
+          printf '%s\n' "$KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/zamagui_deploy" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -P '' -f "$HOME/.ssh/zamagui_deploy" >/dev/null
+          ssh-keygen -F "[$SSH_HOST]:$SSH_PORT" -f "$HOME/.ssh/known_hosts" >/dev/null
+
+      - name: Stage, snapshot and publish exactly three pages
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: bash ops/publish-ecosystem.sh
