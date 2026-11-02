@@ -24,7 +24,7 @@ jobs:
   release:
     name: Deploy only three ecosystem HTML pages
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v6
@@ -81,6 +81,13 @@ jobs:
           chmod 600 "$HOME/.ssh/zamagui_deploy" "$HOME/.ssh/known_hosts"
           ssh-keygen -y -P '' -f "$HOME/.ssh/zamagui_deploy" >/dev/null
           ssh-keygen -F "[$SSH_HOST]:$SSH_PORT" -f "$HOME/.ssh/known_hosts" >/dev/null
+
+      - name: Install production Chromium smoke test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @playwright/test@1.64.1
+          npx playwright install --with-deps chromium
 
       - name: Stage, snapshot and publish exactly three pages
         shell: bash
