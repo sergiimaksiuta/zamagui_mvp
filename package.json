@@ -1,0 +1,16 @@
+{
+  "name": "zamagui-site-qa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZaMaGui browser quality checks and local development",
+  "scripts": {
+    "serve": "python3 -m http.server 4173 --bind 127.0.0.1",
+    "test:e2e": "playwright test --config=e2e/playwright.config.cjs",
+    "test:e2e:live": "PLAYWRIGHT_TEST_BASE_URL=https://zamagui.com playwright test --config=e2e/playwright.config.cjs",
+    "test:e2e:headed": "playwright test --headed --config=e2e/playwright.config.cjs",
+    "test:e2e:ui": "playwright test --ui --config=e2e/playwright.config.cjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
