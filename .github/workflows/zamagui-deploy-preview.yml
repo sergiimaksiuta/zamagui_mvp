@@ -13,12 +13,12 @@ concurrency:
 jobs:
   verify:
     name: Validate source and dry-run remote sync
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
 
     steps:
       - name: Checkout exact commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Validate source
         shell: bash
