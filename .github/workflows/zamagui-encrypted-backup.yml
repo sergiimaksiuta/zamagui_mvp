@@ -1,0 +1,96 @@
+name: ZaMaGui - Encrypted offsite backup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Encrypted production snapshot (read-only)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Confirm prerequisites
+        shell: bash
+        env:
+          AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+          HOST_VERIFIED: ${{ vars.HOST_FINGERPRINT_VERIFIED }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          set -euo pipefail
+          [[ "$HOST_VERIFIED" == "true" ]] || {
+            echo "BLOCKED: independently verify HOSTiQ host key first"; exit 1;
+          }
+          [[ "$AGE_RECIPIENT" =~ ^age1[023456789acdefghjklmnpqrstuvwxyz]{58}$ ]] || {
+            echo "BLOCKED: BACKUP_AGE_RECIPIENT absent or invalid"; exit 1;
+          }
+          for value in "$SSH_PRIVATE_KEY" "$SSH_KNOWN_HOSTS" "$SSH_HOST" "$SSH_PORT" "$SSH_USER"; do
+            [[ -n "$value" ]] || { echo "BLOCKED: SSH secrets missing"; exit 1; }
+          done
+          echo "Backup prerequisites: OK"
+
+      - name: Install age
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq age
+
+      - name: Create encrypted site snapshot
+        shell: bash
+        env:
+          AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          set -euo pipefail
+          export LANG=C LC_ALL=C
+          umask 077
+          mkdir -p "$HOME/.ssh" "$RUNNER_TEMP/zamagui-backup"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/id_deploy"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/id_deploy" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -P '' -f "$HOME/.ssh/id_deploy" >/dev/null
+          ssh-keygen -F "[$SSH_HOST]:$SSH_PORT" -f "$HOME/.ssh/known_hosts" >/dev/null
+          SSH_OPTIONS=(
+            -F /dev/null
+            -i "$HOME/.ssh/id_deploy"
+            -p "$SSH_PORT"
+            -o IdentitiesOnly=yes
+            -o BatchMode=yes
+            -o StrictHostKeyChecking=yes
+            -o "UserKnownHostsFile=$HOME/.ssh/known_hosts"
+            -o ConnectTimeout=15
+          )
+          ssh -n "${SSH_OPTIONS[@]}" "$SSH_USER@$SSH_HOST"             'test -f /home4/dataforg/zamagui.com/index.html && test -d /home4/dataforg/zamagui.com/assets'
+          # Encryption happens in a stream, without plaintext stored on the runner.
+          ssh -n "${SSH_OPTIONS[@]}" "$SSH_USER@$SSH_HOST"             'tar -C /home4/dataforg -czf - zamagui.com'             | age -r "$AGE_RECIPIENT" -o "$RUNNER_TEMP/zamagui-backup/site.tar.gz.age"
+          test -s "$RUNNER_TEMP/zamagui-backup/site.tar.gz.age"
+          cd "$RUNNER_TEMP/zamagui-backup"
+          sha256sum site.tar.gz.age > site.tar.gz.age.sha256
+          sha256sum -c site.tar.gz.age.sha256
+          printf 'commit=%s\n' "$GITHUB_SHA" > backup-source.txt
+          printf 'utc=%s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> backup-source.txt
+          printf 'scope=webroot-files-only; no database or mail backup\n' >> backup-source.txt
+          echo "Encrypted snapshot created; offline restore test still required"
+
+      - name: Upload encrypted archive
+        uses: actions/upload-artifact@v5
+        with:
+          name: zamagui-encrypted-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/zamagui-backup/
+          if-no-files-found: error
+          retention-days: 14
