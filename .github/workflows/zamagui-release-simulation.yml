@@ -1,0 +1,28 @@
+name: ZaMaGui - Release safety simulation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-release-simulation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulate:
+    name: Offline three-file release and rollback
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v6
+
+      - name: Check scripts and simulate release
+        shell: bash
+        run: bash ops/test-ecosystem-release.sh
