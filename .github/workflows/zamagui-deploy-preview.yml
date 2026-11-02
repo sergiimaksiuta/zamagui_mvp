@@ -38,6 +38,41 @@ jobs:
 
           echo 'Source validation passed'
 
+      - name: Build public-only deployment payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          PUBLIC_DIR="$RUNNER_TEMP/zamagui-public"
+          mkdir -p "$PUBLIC_DIR"
+          count=0
+          while IFS= read -r -d '' file; do
+            case "$file" in
+              *.html)
+                if [[ "$file" == */* && "$file" != en/*.html && "$file" != ru/*.html ]]; then
+                  continue
+                fi
+                ;;
+              robots.txt|sitemap.xml|locales/*.json) ;;
+              assets/*)
+                case "$file" in
+                  *.css|*.js|*.json|*.svg|*.png|*.jpg|*.jpeg|*.webp|*.avif|*.gif|*.ico|*.woff|*.woff2) ;;
+                  *) continue ;;
+                esac
+                ;;
+              *) continue ;;
+            esac
+            if [[ ! -f "$file" || -L "$file" ]]; then
+              echo "Unexpected public asset: $file" >&2
+              exit 1
+            fi
+            install -D -- "$file" "$PUBLIC_DIR/$file"
+            count=$((count + 1))
+          done < <(git ls-files -z)
+          test -s "$PUBLIC_DIR/index.html"
+          test -s "$PUBLIC_DIR/ecosystem.html"
+          test "$count" -gt 10
+          echo "Public deployment payload: $count files"
+          echo 'Internal documentation and configuration are excluded'
       - name: Configure SSH
         shell: bash
         env:
@@ -82,24 +117,11 @@ jobs:
           $SSH_CMD -n "$SSH_USER@$SSH_HOST" \
             'test -f /home4/dataforg/zamagui.com/index.html && command -v rsync >/dev/null && echo REMOTE_OK'
 
-          rsync -avzn --stats --itemize-changes \
+          # Compare file contents, not timestamps. No upload and no deletes.
+          # The payload contains only public website assets.
+          rsync -rvcni --stats --itemize-changes \
             -e "$SSH_CMD" \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='.env*' \
-            --exclude='*.pem' \
-            --exclude='.DS_Store' \
-            --exclude='.gitattributes' \
-            --exclude='README.md' \
-            --exclude='LICENSE' \
-            --exclude='node_modules/' \
-            --exclude='docs/' \
-            --exclude='tests/' \
-            --exclude='scripts/' \
-            --exclude='api/' \
-            --exclude='business-zamagui/' \
-            --exclude='beta/' \
-            --exclude='.htaccess' \
-            ./ "$SSH_USER@$SSH_HOST:/home4/dataforg/zamagui.com/"
+            "$RUNNER_TEMP/zamagui-public/" \
+            "$SSH_USER@$SSH_HOST:/home4/dataforg/zamagui.com/"
 
           echo 'DRY RUN: Production unchanged'
