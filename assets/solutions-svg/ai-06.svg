@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="ai — shield">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0FBFD"/><stop offset="1" stop-color="#B6F4FF"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#15D3DC" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#15D3DC" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#15D3DC" opacity=".32"/><rect x="101" y="46" width="447" height="275" rx="105" fill="#B6F4FF" opacity=".7"/>
+ <g transform="translate(64 34) scale(0.8)"><path d="M313 80 L437 128 V190 C437 262 363 293 313 309 C260 293 189 262 189 190 V128 Z" fill="#F0FBFD" stroke="#166AF2" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M249 194 L297 239 L383 143" fill="none" stroke="#15D3DC" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#166AF2" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

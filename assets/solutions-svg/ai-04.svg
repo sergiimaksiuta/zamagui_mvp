@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="ai — database">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F0FBFD"/><stop offset="1" stop-color="#B6F4FF"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#15D3DC" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#15D3DC" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#15D3DC" opacity=".32"/><rect x="96" y="45" width="444" height="270" rx="48" fill="#B6F4FF" opacity=".65"/>
+ <g transform="translate(64 34) scale(0.8)"><ellipse cx="314" cy="112" rx="120" ry="45" fill="#F0FBFD" stroke="#166AF2" stroke-width="10"/><path d="M194 112 V249 C194 312 434 312 434 249 V112" fill="#F0FBFD" stroke="#166AF2" stroke-width="10"/><path d="M194 163 C194 225 434 225 434 163 M194 209 C194 270 434 270 434 209" fill="none" stroke="#166AF2" stroke-width="9"/><ellipse cx="314" cy="111" rx="90" ry="27" fill="#15D3DC"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#166AF2" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="marketplace — chart">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1F4"/><stop offset="1" stop-color="#FFD5D6"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#FFBF55" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#FFBF55" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#FFBF55" opacity=".32"/><rect x="101" y="46" width="447" height="275" rx="105" fill="#FFD5D6" opacity=".7"/>
+ <g transform="translate(64 34) scale(0.8)"><path d="M180 225 L245 188 L303 197 L360 112 L430 133" fill="none" stroke="#FF6682" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/><path d="M405 122 L434 126 L423 158" fill="none" stroke="#FF6682" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><rect x="170" y="244" width="40" height="36" rx="8" fill="#FFBF55"/><rect x="230" y="219" width="40" height="61" rx="8" fill="#FFBF55"/><rect x="290" y="196" width="40" height="84" rx="8" fill="#FFBF55"/><rect x="350" y="157" width="40" height="123" rx="8" fill="#FF6682"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#FF6682" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

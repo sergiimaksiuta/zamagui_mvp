@@ -1,0 +1,914 @@
+{
+  "uk": {
+    "status": {
+      "live": "Приймаємо запити",
+      "pilot": "Формуємо пілот",
+      "soon": "У планах"
+    },
+    "cards": {
+      "growth": {
+        "name": "Growth",
+        "status": "live",
+        "focus": "Систематизація бізнесу, делегування, продажі та масштабування без постійної перевантаженості власника.",
+        "url": "/growth.html"
+      },
+      "kids": {
+        "name": "Kids",
+        "status": "live",
+        "focus": "Розвиток підлітків через практику, AI/IT, підприємницьке мислення й сильне наставництво.",
+        "url": "/kids.html"
+      },
+      "ai": {
+        "name": "AI / IT",
+        "status": "live",
+        "focus": "AI-аудит, автоматизація й цифрові інструменти, що працюють для реальних процесів.",
+        "url": "/ai.html"
+      },
+      "guild": {
+        "name": "Guild",
+        "status": "pilot",
+        "focus": "Майстри, репутація, наставництво, взаємні рекомендації та партнерські проєкти.",
+        "url": "/guild.html"
+      },
+      "marketplace": {
+        "name": "Marketplace",
+        "status": "soon",
+        "focus": "Продукти й послуги учасників, їхня упаковка, просування та шлях до клієнта.",
+        "url": "/marketplace.html"
+      },
+      "capital": {
+        "name": "Capital",
+        "status": "soon",
+        "focus": "Фінансові моделі, проєкти, партнерські механіки та підготовка до пілотів і масштабування.",
+        "url": "/capital.html"
+      }
+    },
+    "routes": {
+      "growth": [
+        {
+          "target": "ai",
+          "title": "Автоматизувати процеси",
+          "description": "Від систематизації до інструментів, які знімають рутинну роботу."
+        },
+        {
+          "target": "guild",
+          "title": "Залучити експертів",
+          "description": "Знайти майстрів і партнерів під конкретні задачі команди."
+        },
+        {
+          "target": "capital",
+          "title": "Підготувати масштабування",
+          "description": "Перевірити економіку нових продуктів і варіанти залучення ресурсів."
+        }
+      ],
+      "kids": [
+        {
+          "target": "ai",
+          "title": "Поглибити цифрові навички",
+          "description": "Практика AI, програмування та цифрових проєктів."
+        },
+        {
+          "target": "guild",
+          "title": "Знайти наставника",
+          "description": "Зв’язок з експертами, які передають досвід через реальні задачі."
+        },
+        {
+          "target": "capital",
+          "title": "Підтримати таланти",
+          "description": "Майбутній напрям фінансування та розвитку освітніх можливостей."
+        }
+      ],
+      "ai": [
+        {
+          "target": "growth",
+          "title": "Впровадити в бізнес",
+          "description": "Перетворити цифровий інструмент на частину операційної системи."
+        },
+        {
+          "target": "marketplace",
+          "title": "Запропонувати рішення",
+          "description": "Перейти від розробки до продукту чи послуги для ринку."
+        },
+        {
+          "target": "kids",
+          "title": "Навчати наступне покоління",
+          "description": "Застосувати технологічну експертизу в освітніх програмах."
+        }
+      ],
+      "guild": [
+        {
+          "target": "marketplace",
+          "title": "Вийти на ринок",
+          "description": "Упакувати експертність у послугу та пропозицію."
+        },
+        {
+          "target": "growth",
+          "title": "Підсилити бізнес",
+          "description": "Допомогти компаніям через компетенції й партнерські проєкти."
+        },
+        {
+          "target": "kids",
+          "title": "Стати наставником",
+          "description": "Передавати досвід підліткам і підтримувати їхні проєкти."
+        },
+        {
+          "target": "capital",
+          "title": "Розвинути спільний проєкт",
+          "description": "Структурувати партнерство й підготувати економіку ініціативи."
+        }
+      ],
+      "marketplace": [
+        {
+          "target": "guild",
+          "title": "Знайти авторів і партнерів",
+          "description": "Розвивати каталог через майстрів та експертні команди."
+        },
+        {
+          "target": "growth",
+          "title": "Побудувати продажі",
+          "description": "Налаштувати офер, процес замовлення та повторні покупки."
+        },
+        {
+          "target": "ai",
+          "title": "Автоматизувати замовлення",
+          "description": "Пов’язати продажі, дані та клієнтський супровід."
+        }
+      ],
+      "capital": [
+        {
+          "target": "growth",
+          "title": "Зміцнити бізнес-модель",
+          "description": "Підготувати процеси та команду до розвитку."
+        },
+        {
+          "target": "guild",
+          "title": "Знайти партнерів",
+          "description": "Залучити експертизу й співтворців для ініціативи."
+        },
+        {
+          "target": "marketplace",
+          "title": "Перевірити попит",
+          "description": "Спробувати ринкову пропозицію перед масштабуванням."
+        }
+      ]
+    },
+    "initiatives": {
+      "growth": [
+        {
+          "id": "business-diagnostics",
+          "name": "Бізнес-діагностика",
+          "url": "/growth.html"
+        },
+        {
+          "id": "leadership",
+          "name": "Розвиток керівників",
+          "url": "/growth.html"
+        },
+        {
+          "id": "growth-hacking",
+          "name": "Growth Hacking",
+          "url": "/growth.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Масштабування",
+          "url": "/franchise.html"
+        },
+        {
+          "id": "regional-offices",
+          "name": "Регіональні офіси",
+          "url": "/franchise.html"
+        }
+      ],
+      "kids": [
+        {
+          "id": "kids-elite",
+          "name": "Преміальна програма",
+          "url": "/kids-elite.html"
+        },
+        {
+          "id": "kids-talent",
+          "name": "Підтримка талантів",
+          "url": "/kids-talent.html"
+        },
+        {
+          "id": "family",
+          "name": "Освітні можливості сімей",
+          "url": "/kids.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Наставництво",
+          "url": "/experts.html"
+        },
+        {
+          "id": "career",
+          "name": "Професійний розвиток",
+          "url": "/programs.html"
+        }
+      ],
+      "ai": [
+        {
+          "id": "automation",
+          "name": "AI та автоматизація",
+          "url": "/ai.html"
+        },
+        {
+          "id": "corporate-academy",
+          "name": "Корпоративна академія",
+          "url": "/programs.html"
+        },
+        {
+          "id": "professional-services",
+          "name": "Професійні послуги",
+          "url": "/marketplace.html"
+        }
+      ],
+      "guild": [
+        {
+          "id": "experts",
+          "name": "Експерти й майстри",
+          "url": "/experts.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Наставництво",
+          "url": "/experts.html"
+        },
+        {
+          "id": "certification",
+          "name": "Визнання майстерності",
+          "url": "/guild.html"
+        },
+        {
+          "id": "member-profiles",
+          "name": "Профілі учасників",
+          "url": "/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Партнерські проєкти",
+          "url": "/partners.html"
+        },
+        {
+          "id": "international",
+          "name": "Міжнародні зв’язки",
+          "url": "/partners.html"
+        }
+      ],
+      "marketplace": [
+        {
+          "id": "professional-services",
+          "name": "Професійні послуги",
+          "url": "/marketplace.html"
+        },
+        {
+          "id": "experts",
+          "name": "Експерти й майстри",
+          "url": "/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Партнерські проєкти",
+          "url": "/partners.html"
+        }
+      ],
+      "capital": [
+        {
+          "id": "fund",
+          "name": "Фонд розвитку",
+          "url": "/capital.html"
+        },
+        {
+          "id": "invest-pilots",
+          "name": "Інвестиційні пілоти",
+          "url": "/capital.html"
+        },
+        {
+          "id": "ventures",
+          "name": "Венчурна студія",
+          "url": "/partners.html"
+        },
+        {
+          "id": "startups",
+          "name": "Бізнес-проєкти",
+          "url": "/partners.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Масштабування",
+          "url": "/franchise.html"
+        }
+      ]
+    },
+    "open": "Перейти до напряму"
+  },
+  "en": {
+    "status": {
+      "live": "Accepting enquiries",
+      "pilot": "Pilot in preparation",
+      "soon": "Planned"
+    },
+    "cards": {
+      "growth": {
+        "name": "Growth",
+        "status": "live",
+        "focus": "Business systems, delegation, sales and scalable growth without burning out the owner.",
+        "url": "/en/growth.html"
+      },
+      "kids": {
+        "name": "Kids",
+        "status": "live",
+        "focus": "Teen development through projects, AI/IT, entrepreneurial thinking and great mentorship.",
+        "url": "/en/kids.html"
+      },
+      "ai": {
+        "name": "AI / IT",
+        "status": "live",
+        "focus": "AI audits, automation and digital tools built for real workflows.",
+        "url": "/en/ai.html"
+      },
+      "guild": {
+        "name": "Guild",
+        "status": "pilot",
+        "focus": "Makers, reputation, mentorship, referrals and partnership projects.",
+        "url": "/en/guild.html"
+      },
+      "marketplace": {
+        "name": "Marketplace",
+        "status": "soon",
+        "focus": "Products and services, offer packaging, reach and the customer journey.",
+        "url": "/en/marketplace.html"
+      },
+      "capital": {
+        "name": "Capital",
+        "status": "soon",
+        "focus": "Financial models, projects, partnerships, pilots and scale-up preparation.",
+        "url": "/en/capital.html"
+      }
+    },
+    "routes": {
+      "growth": [
+        {
+          "target": "ai",
+          "title": "Automate operations",
+          "description": "Turn operational improvements into tools that remove repetitive tasks."
+        },
+        {
+          "target": "guild",
+          "title": "Find experts",
+          "description": "Connect with professionals and partners for your team’s challenges."
+        },
+        {
+          "target": "capital",
+          "title": "Prepare to scale",
+          "description": "Test the economics of new offers and potential resource models."
+        }
+      ],
+      "kids": [
+        {
+          "target": "ai",
+          "title": "Develop digital skills",
+          "description": "Explore AI, coding and digital project practice."
+        },
+        {
+          "target": "guild",
+          "title": "Find a mentor",
+          "description": "Access practitioners who teach through real-world work."
+        },
+        {
+          "target": "capital",
+          "title": "Support talent",
+          "description": "A future route for funding educational opportunities."
+        }
+      ],
+      "ai": [
+        {
+          "target": "growth",
+          "title": "Apply it in business",
+          "description": "Embed digital tools into the operating system of a business."
+        },
+        {
+          "target": "marketplace",
+          "title": "Bring solutions to market",
+          "description": "Turn technical work into products and services."
+        },
+        {
+          "target": "kids",
+          "title": "Teach the next generation",
+          "description": "Apply technical expertise in learning experiences."
+        }
+      ],
+      "guild": [
+        {
+          "target": "marketplace",
+          "title": "Reach the market",
+          "description": "Turn expertise into a compelling service or offer."
+        },
+        {
+          "target": "growth",
+          "title": "Strengthen a business",
+          "description": "Support companies through skills and partner projects."
+        },
+        {
+          "target": "kids",
+          "title": "Become a mentor",
+          "description": "Share practical experience with teenagers."
+        },
+        {
+          "target": "capital",
+          "title": "Build a joint venture",
+          "description": "Structure a partnership and test the economics."
+        }
+      ],
+      "marketplace": [
+        {
+          "target": "guild",
+          "title": "Find creators and partners",
+          "description": "Grow the catalogue through makers and specialist teams."
+        },
+        {
+          "target": "growth",
+          "title": "Build a sales system",
+          "description": "Improve the offer, order journey and repeat purchases."
+        },
+        {
+          "target": "ai",
+          "title": "Automate orders",
+          "description": "Connect sales, data and customer support."
+        }
+      ],
+      "capital": [
+        {
+          "target": "growth",
+          "title": "Strengthen the business model",
+          "description": "Prepare processes and teams for growth."
+        },
+        {
+          "target": "guild",
+          "title": "Find partners",
+          "description": "Bring expertise and co-builders into a project."
+        },
+        {
+          "target": "marketplace",
+          "title": "Validate demand",
+          "description": "Test a market offer before scaling."
+        }
+      ]
+    },
+    "initiatives": {
+      "growth": [
+        {
+          "id": "business-diagnostics",
+          "name": "Business diagnostics",
+          "url": "/en/growth.html"
+        },
+        {
+          "id": "leadership",
+          "name": "Leadership development",
+          "url": "/en/growth.html"
+        },
+        {
+          "id": "growth-hacking",
+          "name": "Growth Hacking",
+          "url": "/en/growth.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Franchising",
+          "url": "/en/franchise.html"
+        },
+        {
+          "id": "regional-offices",
+          "name": "Regional offices",
+          "url": "/en/franchise.html"
+        }
+      ],
+      "kids": [
+        {
+          "id": "kids-elite",
+          "name": "Premium learning",
+          "url": "/en/kids-elite.html"
+        },
+        {
+          "id": "kids-talent",
+          "name": "Talent support",
+          "url": "/en/kids-talent.html"
+        },
+        {
+          "id": "family",
+          "name": "Family learning",
+          "url": "/en/kids.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Mentoring",
+          "url": "/en/experts.html"
+        },
+        {
+          "id": "career",
+          "name": "Career development",
+          "url": "/en/programs.html"
+        }
+      ],
+      "ai": [
+        {
+          "id": "automation",
+          "name": "AI automation",
+          "url": "/en/ai.html"
+        },
+        {
+          "id": "corporate-academy",
+          "name": "Corporate academy",
+          "url": "/en/programs.html"
+        },
+        {
+          "id": "professional-services",
+          "name": "Professional services",
+          "url": "/en/marketplace.html"
+        }
+      ],
+      "guild": [
+        {
+          "id": "experts",
+          "name": "Experts and craftspeople",
+          "url": "/en/experts.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Mentoring",
+          "url": "/en/experts.html"
+        },
+        {
+          "id": "certification",
+          "name": "Professional recognition",
+          "url": "/en/guild.html"
+        },
+        {
+          "id": "member-profiles",
+          "name": "Member profiles",
+          "url": "/en/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Partnerships",
+          "url": "/en/partners.html"
+        },
+        {
+          "id": "international",
+          "name": "International networks",
+          "url": "/en/partners.html"
+        }
+      ],
+      "marketplace": [
+        {
+          "id": "professional-services",
+          "name": "Professional services",
+          "url": "/en/marketplace.html"
+        },
+        {
+          "id": "experts",
+          "name": "Experts and craftspeople",
+          "url": "/en/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Partnerships",
+          "url": "/en/partners.html"
+        }
+      ],
+      "capital": [
+        {
+          "id": "fund",
+          "name": "Development fund",
+          "url": "/en/capital.html"
+        },
+        {
+          "id": "invest-pilots",
+          "name": "Investment pilots",
+          "url": "/en/capital.html"
+        },
+        {
+          "id": "ventures",
+          "name": "Venture studio",
+          "url": "/en/partners.html"
+        },
+        {
+          "id": "startups",
+          "name": "Business ventures",
+          "url": "/en/partners.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Franchising",
+          "url": "/en/franchise.html"
+        }
+      ]
+    },
+    "open": "Open direction"
+  },
+  "ru": {
+    "status": {
+      "live": "Принимаем обращения",
+      "pilot": "Готовим пилот",
+      "soon": "В планах"
+    },
+    "cards": {
+      "growth": {
+        "name": "Growth",
+        "status": "live",
+        "focus": "Систематизация бизнеса, делегирование, продажи и рост без постоянной перегрузки собственника.",
+        "url": "/ru/growth.html"
+      },
+      "kids": {
+        "name": "Kids",
+        "status": "live",
+        "focus": "Развитие подростков через практику, AI/IT, предпринимательское мышление и наставников.",
+        "url": "/ru/kids.html"
+      },
+      "ai": {
+        "name": "AI / IT",
+        "status": "live",
+        "focus": "AI-аудит, автоматизация и цифровые инструменты для реальных процессов.",
+        "url": "/ru/ai.html"
+      },
+      "guild": {
+        "name": "Guild",
+        "status": "pilot",
+        "focus": "Мастера, репутация, наставничество, рекомендации и партнёрские проекты.",
+        "url": "/ru/guild.html"
+      },
+      "marketplace": {
+        "name": "Marketplace",
+        "status": "soon",
+        "focus": "Продукты и услуги участников, упаковка, продвижение и путь к клиенту.",
+        "url": "/ru/marketplace.html"
+      },
+      "capital": {
+        "name": "Capital",
+        "status": "soon",
+        "focus": "Финансовые модели, проекты, партнёрства, пилоты и подготовка к масштабу.",
+        "url": "/ru/capital.html"
+      }
+    },
+    "routes": {
+      "growth": [
+        {
+          "target": "ai",
+          "title": "Автоматизировать процессы",
+          "description": "От систематизации — к инструментам, которые убирают рутину."
+        },
+        {
+          "target": "guild",
+          "title": "Найти экспертов",
+          "description": "Подключить мастеров и партнёров под задачи команды."
+        },
+        {
+          "target": "capital",
+          "title": "Подготовить масштабирование",
+          "description": "Проверить экономику новых продуктов и варианты ресурсов."
+        }
+      ],
+      "kids": [
+        {
+          "target": "ai",
+          "title": "Развить цифровые навыки",
+          "description": "Практика AI, программирования и цифровых проектов."
+        },
+        {
+          "target": "guild",
+          "title": "Найти наставника",
+          "description": "Связь с экспертами, передающими опыт на реальных задачах."
+        },
+        {
+          "target": "capital",
+          "title": "Поддержать таланты",
+          "description": "Будущий механизм финансирования образовательных возможностей."
+        }
+      ],
+      "ai": [
+        {
+          "target": "growth",
+          "title": "Внедрить в бизнес",
+          "description": "Сделать цифровой инструмент частью операционной системы."
+        },
+        {
+          "target": "marketplace",
+          "title": "Предложить решение рынку",
+          "description": "Превратить разработку в продукт или услугу."
+        },
+        {
+          "target": "kids",
+          "title": "Обучать новое поколение",
+          "description": "Использовать технологическую экспертизу в обучении."
+        }
+      ],
+      "guild": [
+        {
+          "target": "marketplace",
+          "title": "Выйти на рынок",
+          "description": "Упаковать экспертность в услугу или предложение."
+        },
+        {
+          "target": "growth",
+          "title": "Усилить бизнес",
+          "description": "Помочь компаниям через компетенции и совместные проекты."
+        },
+        {
+          "target": "kids",
+          "title": "Стать наставником",
+          "description": "Передавать опыт подросткам и поддерживать проекты."
+        },
+        {
+          "target": "capital",
+          "title": "Развить общий проект",
+          "description": "Структурировать партнёрство и экономику инициативы."
+        }
+      ],
+      "marketplace": [
+        {
+          "target": "guild",
+          "title": "Найти авторов и партнёров",
+          "description": "Развивать каталог через мастеров и экспертные команды."
+        },
+        {
+          "target": "growth",
+          "title": "Построить продажи",
+          "description": "Настроить оффер, заказ и повторные покупки."
+        },
+        {
+          "target": "ai",
+          "title": "Автоматизировать заказы",
+          "description": "Связать продажи, данные и сопровождение клиентов."
+        }
+      ],
+      "capital": [
+        {
+          "target": "growth",
+          "title": "Усилить бизнес-модель",
+          "description": "Подготовить процессы и команду к развитию."
+        },
+        {
+          "target": "guild",
+          "title": "Найти партнёров",
+          "description": "Привлечь экспертизу и соавторов в проект."
+        },
+        {
+          "target": "marketplace",
+          "title": "Проверить спрос",
+          "description": "Протестировать рыночное предложение до масштабирования."
+        }
+      ]
+    },
+    "initiatives": {
+      "growth": [
+        {
+          "id": "business-diagnostics",
+          "name": "Бизнес-диагностика",
+          "url": "/ru/growth.html"
+        },
+        {
+          "id": "leadership",
+          "name": "Развитие руководителей",
+          "url": "/ru/growth.html"
+        },
+        {
+          "id": "growth-hacking",
+          "name": "Growth Hacking",
+          "url": "/ru/growth.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Франчайзинг",
+          "url": "/ru/franchise.html"
+        },
+        {
+          "id": "regional-offices",
+          "name": "Региональные офисы",
+          "url": "/ru/franchise.html"
+        }
+      ],
+      "kids": [
+        {
+          "id": "kids-elite",
+          "name": "Премиальная программа",
+          "url": "/ru/kids-elite.html"
+        },
+        {
+          "id": "kids-talent",
+          "name": "Поддержка талантов",
+          "url": "/ru/kids-talent.html"
+        },
+        {
+          "id": "family",
+          "name": "Семейное обучение",
+          "url": "/ru/kids.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Наставничество",
+          "url": "/ru/experts.html"
+        },
+        {
+          "id": "career",
+          "name": "Развитие карьеры",
+          "url": "/ru/programs.html"
+        }
+      ],
+      "ai": [
+        {
+          "id": "automation",
+          "name": "AI и автоматизация",
+          "url": "/ru/ai.html"
+        },
+        {
+          "id": "corporate-academy",
+          "name": "Корпоративная академия",
+          "url": "/ru/programs.html"
+        },
+        {
+          "id": "professional-services",
+          "name": "Профессиональные услуги",
+          "url": "/ru/marketplace.html"
+        }
+      ],
+      "guild": [
+        {
+          "id": "experts",
+          "name": "Эксперты и мастера",
+          "url": "/ru/experts.html"
+        },
+        {
+          "id": "mentorship",
+          "name": "Наставничество",
+          "url": "/ru/experts.html"
+        },
+        {
+          "id": "certification",
+          "name": "Признание мастерства",
+          "url": "/ru/guild.html"
+        },
+        {
+          "id": "member-profiles",
+          "name": "Профили участников",
+          "url": "/ru/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Партнёрские проекты",
+          "url": "/ru/partners.html"
+        },
+        {
+          "id": "international",
+          "name": "Международные связи",
+          "url": "/ru/partners.html"
+        }
+      ],
+      "marketplace": [
+        {
+          "id": "professional-services",
+          "name": "Профессиональные услуги",
+          "url": "/ru/marketplace.html"
+        },
+        {
+          "id": "experts",
+          "name": "Эксперты и мастера",
+          "url": "/ru/experts.html"
+        },
+        {
+          "id": "partners",
+          "name": "Партнёрские проекты",
+          "url": "/ru/partners.html"
+        }
+      ],
+      "capital": [
+        {
+          "id": "fund",
+          "name": "Фонд развития",
+          "url": "/ru/capital.html"
+        },
+        {
+          "id": "invest-pilots",
+          "name": "Инвестиционные пилоты",
+          "url": "/ru/capital.html"
+        },
+        {
+          "id": "ventures",
+          "name": "Венчурная студия",
+          "url": "/ru/partners.html"
+        },
+        {
+          "id": "startups",
+          "name": "Бизнес-проекты",
+          "url": "/ru/partners.html"
+        },
+        {
+          "id": "franchise",
+          "name": "Франчайзинг",
+          "url": "/ru/franchise.html"
+        }
+      ]
+    },
+    "open": "Открыть направление"
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="growth — team">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EFF6FF"/><stop offset="1" stop-color="#DCEAFF"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#92F841" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#92F841" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#92F841" opacity=".32"/><rect x="96" y="45" width="444" height="270" rx="48" fill="#DCEAFF" opacity=".65"/>
+ <g transform="translate(64 34) scale(0.8)"><circle cx="250" cy="134" r="45" fill="#92F841" stroke="#1058F8" stroke-width="9"/><circle cx="380" cy="134" r="45" fill="#EFF6FF" stroke="#1058F8" stroke-width="9"/><path d="M159 272 C165 194 331 194 338 272 Z" fill="#EFF6FF" stroke="#1058F8" stroke-width="11"/><path d="M291 272 C300 194 458 194 470 272 Z" fill="#92F841" stroke="#1058F8" stroke-width="11"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#1058F8" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>

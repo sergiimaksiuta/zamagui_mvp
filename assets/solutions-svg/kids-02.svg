@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="kids — mind">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFAE5"/><stop offset="1" stop-color="#FFE5A0"/></linearGradient></defs>
+ <rect width="640" height="340" rx="38" fill="url(#g)"/>
+ <circle cx="547" cy="54" r="90" fill="#85E34A" opacity=".15"/><circle cx="92" cy="277" r="56" fill="#85E34A" opacity=".15"/><circle cx="534" cy="295" r="22" fill="#85E34A" opacity=".32"/><path d="M93 275 C116 105 275 71 466 80 C589 88 594 262 517 291 C354 360 144 353 93 275Z" fill="#FFE5A0" opacity=".85"/>
+ <g transform="translate(64 34) scale(0.8)"><circle cx="315" cy="186" r="55" fill="#85E34A" stroke="#FFB31A" stroke-width="9"/><path d="M315 186 L188 100" stroke="#FFB31A" stroke-width="10"/><circle cx="188" cy="100" r="24" fill="#FFFAE5" stroke="#FFB31A" stroke-width="8"/><path d="M315 186 L432 105" stroke="#FFB31A" stroke-width="10"/><circle cx="432" cy="105" r="24" fill="#FFFAE5" stroke="#FFB31A" stroke-width="8"/><path d="M315 186 L180 253" stroke="#FFB31A" stroke-width="10"/><circle cx="180" cy="253" r="24" fill="#FFFAE5" stroke="#FFB31A" stroke-width="8"/><path d="M315 186 L445 257" stroke="#FFB31A" stroke-width="10"/><circle cx="445" cy="257" r="24" fill="#FFFAE5" stroke="#FFB31A" stroke-width="8"/></g>
+ <path d="M500 84 L535 55 M522 103 L570 92" stroke="#FFB31A" stroke-width="8" stroke-linecap="round" opacity=".55"/>
+ </svg>
