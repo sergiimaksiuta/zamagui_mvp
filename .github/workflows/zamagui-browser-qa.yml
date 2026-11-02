@@ -1,0 +1,67 @@
+name: ZaMaGui - Browser smoke QA
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-browser-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-smoke:
+    name: Chromium smoke tests (uk / ru / en)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
+
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v6
+
+      - name: Install pinned browser test runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @playwright/test@1.64.1
+
+      - name: Start isolated local site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/zamagui-http.log 2>&1 &
+          echo $! > /tmp/zamagui-http.pid
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:4173/index.html >/dev/null; then
+              echo 'Local test site ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/zamagui-http.log
+          exit 1
+
+      - name: Run browser tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx playwright test --config=e2e/playwright.config.cjs
+
+      - name: Upload failing browser report
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: zamagui-browser-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
