@@ -1,0 +1,68 @@
+name: ZaMaGui - Manual ecosystem rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_run_id:
+        description: 'GitHub Actions run ID of the ecosystem release to restore'
+        required: true
+        type: string
+      approval:
+        description: 'Type ROLLBACK_THREE_ECOSYSTEM_PAGES'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-production-release
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    name: Restore exactly three original ecosystem pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout rollback script
+        uses: actions/checkout@v6
+
+      - name: Require explicit approval and verified SSH
+        shell: bash
+        env:
+          RELEASE_ID: ${{ inputs.release_run_id }}
+          APPROVAL: ${{ inputs.approval }}
+          HOST_VERIFIED: ${{ vars.HOST_FINGERPRINT_VERIFIED }}
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == refs/heads/main ]] || exit 1
+          [[ "$APPROVAL" == ROLLBACK_THREE_ECOSYSTEM_PAGES ]] || exit 1
+          [[ "$HOST_VERIFIED" == true ]] || exit 1
+          [[ "$RELEASE_ID" =~ ^[0-9]{8,15}$ ]] || exit 1
+
+      - name: Restore server-side snapshot
+        shell: bash
+        env:
+          RELEASE_ID: ${{ inputs.release_run_id }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/zmg_key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/zmg_key" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -P '' -f "$HOME/.ssh/zmg_key" >/dev/null
+          ssh-keygen -F "[$SSH_HOST]:$SSH_PORT" -f "$HOME/.ssh/known_hosts" >/dev/null
+          ssh -F /dev/null -i "$HOME/.ssh/zmg_key" -p "$SSH_PORT" \
+            -o IdentitiesOnly=yes -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o "UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            "$SSH_USER@$SSH_HOST" bash -s -- rollback "$RELEASE_ID" \
+            < ops/remote-ecosystem-release.sh
+          echo 'Rollback completed; verify live pages in a browser'
