@@ -1,0 +1,51 @@
+name: ZaMaGui Business - controlled FTPS release
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_BUSINESS to publish business.zamagui.com'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zamagui-business-production
+  cancel-in-progress: false
+
+jobs:
+  verify-and-release:
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'DEPLOY_BUSINESS'
+    environment: business-production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check scope, source and languages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s business-site/uk/index.html
+          test -s business-site/ru/index.html
+          test -s business-site/en/index.html
+          test -s business-site/api/lead.php
+          test -s business-site/assets/site.css
+          if find business-site -type l | grep -q .; then echo 'Unexpected symlinks'; exit 1; fi
+          if find business-site -type f -name '.env*' | grep -q .; then echo 'Secret files in payload'; exit 1; fi
+          python3 -m py_compile ops/business-ftps-release.py
+      - name: Validate PHP code
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y php-cli
+          php -l business-site/api/lead.php
+      - name: Verify HOSTiQ root and publish safely over FTPS
+        env:
+          BUSINESS_FTPS_HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
+          BUSINESS_FTPS_USER: ${{ secrets.BUSINESS_FTPS_USER }}
+          BUSINESS_FTPS_PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$BUSINESS_FTPS_HOST" && test -n "$BUSINESS_FTPS_USER" && test -n "$BUSINESS_FTPS_PASSWORD"
+          python3 ops/business-ftps-release.py
