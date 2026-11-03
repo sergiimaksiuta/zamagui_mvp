@@ -1,68 +1,65 @@
-name: ZaMaGui Business - FTPS release
+name: ZaMaGui Business - controlled FTPS release
 on:
   workflow_dispatch:
     inputs:
       confirmation:
-        description: 'Type DEPLOY_BUSINESS to publish business.zamagui.com'
+        description: 'Type DEPLOY_BUSINESS to approve isolated publication'
         required: true
         type: string
 permissions:
   contents: read
 concurrency:
-  group: zamagui-business-production
+  group: zamagui-business-prod
   cancel-in-progress: false
 jobs:
-  verify:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check business payload
-        run: bash scripts/check-business.sh
   deploy:
-    needs: verify
     if: github.ref == 'refs/heads/main' && inputs.confirmation == 'DEPLOY_BUSINESS'
-    environment: business-production
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    environment: business-production
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Check again
-        run: bash scripts/check-business.sh
-      - name: Install FTPS client
-        run: sudo apt-get update -qq && sudo apt-get install -y lftp
-      - name: Require all FTPS secrets
-        env:
-          FTPS_HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
-          FTPS_USER: ${{ secrets.BUSINESS_FTPS_USER }}
-          FTPS_PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
+      - name: Check production payload
         run: |
-          test -n "$FTPS_HOST" && test -n "$FTPS_USER" && test -n "$FTPS_PASSWORD"
-      - name: Publish isolated Business directory using explicit FTPS
+          test -s business-site/uk/index.html
+          test -s business-site/ru/index.html
+          test -s business-site/en/index.html
+          test -s business-site/api/lead.php
+          if find business-site -type l | grep -q .; then exit 1; fi
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y lftp
+      - name: Verify public FTP root and publish
         env:
-          FTPS_HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
-          FTPS_USER: ${{ secrets.BUSINESS_FTPS_USER }}
-          FTPS_PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
-        shell: bash
+          HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
+          USER: ${{ secrets.BUSINESS_FTPS_USER }}
+          PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
         run: |
           set -euo pipefail
+          test -n "$HOST" && test -n "$USER" && test -n "$PASSWORD"
+          export LFTP_PASSWORD="$PASSWORD"
           umask 077
+          PROBE="zmg-proof-$(openssl rand -hex 12).txt"
+          TOKEN="$(openssl rand -hex 32)"
+          printf '%s' "$TOKEN" > "$RUNNER_TEMP/$PROBE"
           cat > "$HOME/.lftprc" <<'CONFIG'
           set cmd:fail-exit yes
-          set net:max-retries 2
-          set net:timeout 20
           set ftp:ssl-force yes
           set ftp:ssl-protect-data yes
-          set ftp:ssl-auth TLS
           set ssl:verify-certificate yes
           set ftp:passive-mode yes
+          set net:max-retries 2
           CONFIG
-          cat > "$RUNNER_TEMP/ftps.lftp" <<'SCRIPT'
-          mirror --reverse --verbose --no-perms --parallel=1 business-site/ /
-          bye
-          SCRIPT
-          lftp -u "$FTPS_USER","$FTPS_PASSWORD" "ftp://$FTPS_HOST" -f "$RUNNER_TEMP/ftps.lftp"
-      - name: Verify live response
-        run: |
-          curl --fail --location --silent --show-error --retry 3 \
-            --max-time 20 https://business.zamagui.com/ > "$RUNNER_TEMP/business-live.html"
-          grep -q 'ZaMaGui Business' "$RUNNER_TEMP/business-live.html"
+          # lftp obtains the password from an ephemeral protected .netrc; never log it.
+          printf 'machine %s login %s password %s\n' "$HOST" "$USER" "$PASSWORD" > "$HOME/.netrc"
+          chmod 600 "$HOME/.netrc"
+          lftp "ftp://$HOST" -e "put $RUNNER_TEMP/$PROBE -o /$PROBE; bye"
+          FOUND="$(curl --fail --silent --show-error --max-time 20 "https://business.zamagui.com/$PROBE")" || {
+            lftp "ftp://$HOST" -e "rm /$PROBE; bye" || true
+            echo 'FTP root failed HTTPS proof; deployment blocked'
+            exit 1
+          }
+          lftp "ftp://$HOST" -e "rm /$PROBE; bye"
+          test "$FOUND" = "$TOKEN" || { echo 'Public root mismatch'; exit 1; }
+          # The FTP account must be restricted to the business document root.
+          lftp "ftp://$HOST" -e "mirror --reverse --verbose --no-perms business-site/ /; bye"
+          curl --fail --location --silent --show-error --max-time 20 "https://business.zamagui.com/uk/" | grep -q 'ZaMaGui'
