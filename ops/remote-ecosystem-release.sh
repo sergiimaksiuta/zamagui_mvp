@@ -46,7 +46,11 @@ ACTUAL_SHA="$(sha256sum "$BASE/payload.tar.gz" | awk '{print $1}')"
 [[ "$ACTUAL_SHA" == "$EXPECTED_SHA" ]] || { echo 'Payload checksum mismatch'; exit 1; }
 
 # Allow exactly three known paths in the tar archive, excluding traversal.
-mapfile -t tar_entries < <(tar -tzf "$BASE/payload.tar.gz")
+# HOSTiQ jailed-shell environments may lack /dev/fd/* used by process substitution.
+# Read tar inventory through a regular file instead of < <(...).
+TAR_LIST="$BASE/tar-list.txt"
+tar -tzf "$BASE/payload.tar.gz" > "$TAR_LIST"
+mapfile -t tar_entries < "$TAR_LIST"
 [[ "${#tar_entries[@]}" == 3 ]] || { echo 'Unexpected payload count'; exit 1; }
 for i in 0 1 2; do
   [[ "${tar_entries[$i]}" == "${FILES[$i]}" ]] || { echo 'Unexpected payload entry'; exit 1; }
