@@ -3,6 +3,11 @@ set -euo pipefail
 export LANG=C LC_ALL=C
 bash -n ops/publish-ecosystem.sh
 bash -n ops/remote-ecosystem-release.sh
+# Regression: shared HOSTiQ shell has no usable /dev/fd for Bash process substitution.
+if grep -Fq '< <(' ops/remote-ecosystem-release.sh; then
+  echo 'FAIL: remote release depends on inaccessible /dev/fd process substitution' >&2
+  exit 1
+fi
 
 TEST_DIR="$(mktemp -d)"
 trap 'rm -rf -- "$TEST_DIR"' EXIT
