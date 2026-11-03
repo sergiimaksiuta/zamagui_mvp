@@ -47,7 +47,7 @@ ACTUAL_SHA="$(sha256sum "$BASE/payload.tar.gz" | awk '{print $1}')"
 
 # Allow exactly three known paths in the tar archive, excluding traversal.
 # HOSTiQ jailed-shell environments may lack /dev/fd/* used by process substitution.
-# Read tar inventory through a regular file instead of < <(...).
+# Read tar inventory through a normal private file, avoiding ephemeral FDs.
 TAR_LIST="$BASE/tar-list.txt"
 tar -tzf "$BASE/payload.tar.gz" > "$TAR_LIST"
 mapfile -t tar_entries < "$TAR_LIST"
