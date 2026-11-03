@@ -14,6 +14,19 @@ flock($fp,LOCK_EX);$prev=(int)trim((string)stream_get_contents($fp));if($prev>ti
 rewind($fp);ftruncate($fp,0);fwrite($fp,(string)time());flock($fp,LOCK_UN);fclose($fp);
 $reference=strtoupper(bin2hex(random_bytes(6)));$subject='ZaMaGui Business '.($kind==='bug'?'bug':'lead').' '.$reference;
 $plain="Reference: $reference\nKind: $kind\nName: $name\nEmail: $email\nPhone: ".(string)($_POST['phone']??'')."\nCategory: ".(string)($_POST['category']??'')."\nMessage:\n$message\n";
+// CRM becomes the authoritative lead store once the protected server config exists.
+require_once __DIR__ . '/espo-adapter.php';
+$crmConfig = zmg_crm_config();
+if ($crmConfig !== null) {
+    $crmId = zmg_crm_create_lead([
+        'name'=>$name, 'email'=>$email, 'phone'=>(string)($_POST['phone']??''),
+        'category'=>(string)($_POST['category']??''), 'kind'=>$kind, 'message'=>$message,
+    ]);
+    if ($crmId === null) out(503, ['ok'=>false,'error'=>'crm_unavailable']);
+    out(200, ['ok'=>true,'reference'=>$reference,'recorded'=>'crm']);
+}
+// Legacy email fallback remains available until CRM is installed and configured.
+// A successful PHP mail() call is NOT proof of mailbox delivery.
 $success=@mail('business@zamagui.com',$subject,$plain,"From: ZaMaGui Business <business@zamagui.com>\r\nContent-Type: text/plain; charset=UTF-8");
 if(!$success)out(503,['ok'=>false,'error'=>'mail_unavailable']);
 out(200,['ok'=>true,'reference'=>$reference]);
