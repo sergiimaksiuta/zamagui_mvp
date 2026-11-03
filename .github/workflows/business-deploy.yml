@@ -3,63 +3,49 @@ on:
   workflow_dispatch:
     inputs:
       confirmation:
-        description: 'Type DEPLOY_BUSINESS to approve isolated publication'
+        description: 'Type DEPLOY_BUSINESS to publish business.zamagui.com'
         required: true
         type: string
+
 permissions:
   contents: read
+
 concurrency:
-  group: zamagui-business-prod
+  group: zamagui-business-production
   cancel-in-progress: false
+
 jobs:
-  deploy:
+  verify-and-release:
     if: github.ref == 'refs/heads/main' && inputs.confirmation == 'DEPLOY_BUSINESS'
-    runs-on: ubuntu-24.04
     environment: business-production
-    timeout-minutes: 20
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Check production payload
+      - name: Check scope, source and languages
+        shell: bash
         run: |
+          set -euo pipefail
           test -s business-site/uk/index.html
           test -s business-site/ru/index.html
           test -s business-site/en/index.html
           test -s business-site/api/lead.php
-          if find business-site -type l | grep -q .; then exit 1; fi
-      - name: Install lftp
-        run: sudo apt-get update -qq && sudo apt-get install -y lftp
-      - name: Verify public FTP root and publish
+          test -s business-site/assets/site.css
+          if find business-site -type l | grep -q .; then echo 'Unexpected symlinks'; exit 1; fi
+          if find business-site -type f -name '.env*' | grep -q .; then echo 'Secret files in payload'; exit 1; fi
+          python3 -m py_compile ops/business-ftps-release.py
+      - name: Validate PHP code
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y php-cli
+          php -l business-site/api/lead.php
+      - name: Verify HOSTiQ root and publish safely over FTPS
         env:
-          HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
-          USER: ${{ secrets.BUSINESS_FTPS_USER }}
-          PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
+          BUSINESS_FTPS_HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
+          BUSINESS_FTPS_USER: ${{ secrets.BUSINESS_FTPS_USER }}
+          BUSINESS_FTPS_PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
+        shell: bash
         run: |
           set -euo pipefail
-          test -n "$HOST" && test -n "$USER" && test -n "$PASSWORD"
-          export LFTP_PASSWORD="$PASSWORD"
-          umask 077
-          PROBE="zmg-proof-$(openssl rand -hex 12).txt"
-          TOKEN="$(openssl rand -hex 32)"
-          printf '%s' "$TOKEN" > "$RUNNER_TEMP/$PROBE"
-          cat > "$HOME/.lftprc" <<'CONFIG'
-          set cmd:fail-exit yes
-          set ftp:ssl-force yes
-          set ftp:ssl-protect-data yes
-          set ssl:verify-certificate yes
-          set ftp:passive-mode yes
-          set net:max-retries 2
-          CONFIG
-          # lftp obtains the password from an ephemeral protected .netrc; never log it.
-          printf 'machine %s login %s password %s\n' "$HOST" "$USER" "$PASSWORD" > "$HOME/.netrc"
-          chmod 600 "$HOME/.netrc"
-          lftp "ftp://$HOST" -e "put $RUNNER_TEMP/$PROBE -o /$PROBE; bye"
-          FOUND="$(curl --fail --silent --show-error --max-time 20 "https://business.zamagui.com/$PROBE")" || {
-            lftp "ftp://$HOST" -e "rm /$PROBE; bye" || true
-            echo 'FTP root failed HTTPS proof; deployment blocked'
-            exit 1
-          }
-          lftp "ftp://$HOST" -e "rm /$PROBE; bye"
-          test "$FOUND" = "$TOKEN" || { echo 'Public root mismatch'; exit 1; }
-          # The FTP account must be restricted to the business document root.
-          lftp "ftp://$HOST" -e "mirror --reverse --verbose --no-perms business-site/ /; bye"
-          curl --fail --location --silent --show-error --max-time 20 "https://business.zamagui.com/uk/" | grep -q 'ZaMaGui'
+          test -n "$BUSINESS_FTPS_HOST" && test -n "$BUSINESS_FTPS_USER" && test -n "$BUSINESS_FTPS_PASSWORD"
+          python3 ops/business-ftps-release.py
