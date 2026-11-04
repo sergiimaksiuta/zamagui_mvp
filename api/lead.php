@@ -32,7 +32,7 @@ foreach(['page','source','utm_source','utm_medium','utm_campaign'] as $k){
 }
 try{
  require_once __DIR__.'/_crm.php';
- $saved=zmg_crm_capture(['name'=>$name,'email'=>$email,'phone'=>$phone,'title'=>'ZaMaGui | '.$interest.' | website enquiry','note'=>$note]);
+ $saved=zmg_crm_capture(['name'=>$name,'email'=>$email,'phone'=>$phone,'title'=>'ZaMaGui | '.$interest.' | '.substr(hash('sha256',$message),0,10),'note'=>$note]);
 }catch(Throwable $e){flock($lock,LOCK_UN);fclose($lock);respond(503,['ok'=>false,'message'=>'CRM temporarily unavailable']);}
 rewind($lock);ftruncate($lock,0);fwrite($lock,(string)time());fflush($lock);flock($lock,LOCK_UN);fclose($lock);
 respond(200,['ok'=>true,'reference'=>$saved['ref'],'message'=>'Recorded in CRM']);
