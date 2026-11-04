@@ -52,6 +52,17 @@ jobs:
           path: dist/business-site/
           if-no-files-found: error
           retention-days: 14
+      - name: Package complete main-domain site from original source
+        if: success()
+        run: python3 ops/package-main-hostiq.py
+      - name: Upload separately deployable main-domain ZIP
+        if: success()
+        uses: actions/upload-artifact@v5
+        with:
+          name: zamagui-main-hostiq-candidate
+          path: dist/ZaMaGui_Main_HOSTIQ_candidate.zip
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload failed browser evidence
         if: failure()
         uses: actions/upload-artifact@v5
