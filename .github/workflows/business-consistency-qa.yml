@@ -1,0 +1,55 @@
+name: ZaMaGui Business - shared design QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'business-site/**'
+      - 'assets/**'
+      - 'ops/build-business-shared.py'
+      - '.github/workflows/business-deploy.yml'
+      - '.github/workflows/business-consistency-qa.yml'
+      - 'e2e/business*'
+      - 'index.html'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  consistency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build isolated business distribution from canonical source
+        run: python3 ops/build-business-shared.py
+      - name: Validate source and browser scripts
+        run: |
+          node --check business-site/assets/brand-controls.js
+          python3 -m py_compile ops/build-business-shared.py
+          test -s dist/business-site/assets/zmg-shared/approved.css
+          test -s dist/business-site/assets/zmg-shared/growth-light.webp
+          test "$(find dist/business-site/uk dist/business-site/ru dist/business-site/en -name index.html | wc -l)" = "36"
+      - name: Install pinned Playwright
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @playwright/test@1.64.1
+      - name: Start isolated local server
+        run: |
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory dist/business-site >/tmp/zamagui-business.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:4174/uk/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/zamagui-business.log
+          exit 1
+      - name: Responsive UK RU EN QA
+        run: npx playwright test --config=e2e/business.config.cjs
+      - name: Upload failed browser evidence
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: zamagui-business-browser-failure
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
