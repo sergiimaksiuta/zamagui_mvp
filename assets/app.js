@@ -48,7 +48,7 @@
    if(!form.checkValidity()){form.reportValidity();return;}
    if(!form.elements.email.value.trim()&&!form.elements.phone.value.trim()){status.textContent='Please provide an email or phone number.';return;}
    btn.disabled=true;status.textContent='…';
-   try{if(!form.elements.csrf_token.value)throw Error('CSRF not configured');const r=await fetch(form.action,{method:'POST',credentials:'same-origin',body:new FormData(form)});const payload=await r.json();if(!r.ok||payload.ok!==true)throw Error(payload.message||'Delivery failed');status.textContent=({uk:'Звернення доставлено. Дякуємо!',en:'Enquiry delivered. Thank you!',ru:'Обращение доставлено. Спасибо!'})[body.dataset.locale]||'Submitted';form.reset();}
+   try{if(!form.elements.csrf_token.value)throw Error('CSRF not configured');const r=await fetch(form.action,{method:'POST',credentials:'same-origin',body:new FormData(form)});const payload=await r.json();if(!r.ok||payload.ok!==true)throw Error(payload.message||'Delivery failed');status.textContent=({uk:'Звернення прийнято для обробки. Дякуємо!',en:'Enquiry accepted for processing. Thank you!',ru:'Обращение принято в обработку. Спасибо!'})[body.dataset.locale]||'Submitted';form.reset();}
    catch(err){status.textContent=({uk:'Звернення не доставлено. Перевірте підключення форми.',en:'Enquiry not delivered. Please check form integration.',ru:'Обращение не доставлено. Проверьте интеграцию формы.'})[body.dataset.locale]||'Not delivered';console.warn('ZaMaGui delivery:',err.message)}finally{btn.disabled=false}
   });
  }
