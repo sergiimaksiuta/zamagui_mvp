@@ -1,0 +1,8 @@
+Options -Indexes
+<FilesMatch "^(?!csrf\.php$|lead\.php$|kids-preregister\.php$).*\.php$">
+Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+Header always set Cache-Control "no-store"
+Header always set X-Content-Type-Options "nosniff"
+</IfModule>
