@@ -32,6 +32,7 @@ function zmg_crm_capture(array $lead): array {
     if (($email===''&&$phone==='')||($email!==''&&!filter_var($email,FILTER_VALIDATE_EMAIL))||strlen($title)>240||strlen($title)<4) throw new RuntimeException('crm_validation');
     $ref=substr(hash_hmac('sha256', ($email!==''?$email:$phone).'|'.$title, $token),0,18);
     $key=hash_hmac('sha256','zmg-crm-'.($email!==''?$email:$phone).'|'.$title,$token);
+    umask(0077);
     $file=sys_get_temp_dir().'/zmg_crm_'.substr($key,0,48).'.json';
     $lock=@fopen($file,'c+');
     if (!$lock||!flock($lock,LOCK_EX)) throw new RuntimeException('crm_lock');
