@@ -1,0 +1,55 @@
+name: ZaMaGui Kids 2027 — Deploy main
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_KIDS_MAIN_2027 to publish zamagui.com'
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: zmg-kids-2027-main
+  cancel-in-progress: false
+jobs:
+  deploy:
+    name: Verified FTPS deploy — zamagui.com
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'DEPLOY_KIDS_MAIN_2027'
+    environment: main-production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify current commit completed Kids CRM QA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          RUNS="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$GITHUB_SHA&per_page=100")"
+          jq -e --arg n 'ZaMaGui Kids 2027 + CRM — QA'             '[.workflow_runs[] | select(.name == $n and .conclusion == "success")] | length > 0'             <<< "$RUNS" >/dev/null
+      - name: Build independent additive ZIP patches
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile ops/build-kids-2027-patches.py ops/deploy-kids-2027-ftps.py
+          python3 ops/build-kids-2027-patches.py
+          python3 ops/deploy-kids-2027-ftps.py --target main             --archive dist/kids-2027/zamagui-kids-2027-main-patch.zip             --backup dist/kids-2027/recovery-main-${{ github.run_id }}.zip --dry-run
+      - name: Verify domain root, back up, publish, smoke and roll back on error
+        env:
+          FTPS_HOST: ${{ secrets.MAIN_FTPS_HOST }}
+          FTPS_USER: ${{ secrets.MAIN_FTPS_USER }}
+          FTPS_PASSWORD: ${{ secrets.MAIN_FTPS_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 ops/deploy-kids-2027-ftps.py --target main             --archive dist/kids-2027/zamagui-kids-2027-main-patch.zip             --backup dist/kids-2027/recovery-main-${{ github.run_id }}.zip
+      - name: Keep tested patch and server recovery archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zmg-kids-main-${{ github.run_id }}
+          path: dist/kids-2027/*.zip
+          if-no-files-found: warn
+          retention-days: 7
