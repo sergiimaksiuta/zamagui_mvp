@@ -40,7 +40,7 @@ def main():
     try:
         ftp.connect(os.environ['FTPS_HOST'],21)
         ftp.auth();ftp.login(os.environ['FTPS_USER'],os.environ['FTPS_PASSWORD']);ftp.prot_p()
-        probe='.zmg-root-'+secrets.token_hex(10)+'.txt'
+        probe='zmg-root-'+secrets.token_hex(10)+'.txt'
         proof=secrets.token_hex(25).encode()
         upload(probe,proof)
         url='https://'+domain+'/'+probe+'?check='+secrets.token_hex(4)
