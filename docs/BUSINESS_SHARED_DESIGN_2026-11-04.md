@@ -36,4 +36,6 @@ These tests must actually pass before anyone authorizes deployment. Manual revie
 5. Merge only after review. A business production workflow is manually triggered with confirmation \`DEPLOY_BUSINESS\`.
 6. Run smoke tests against the published domain, and restore backup if anything breaks.
 
-Main \`zamagui.com\` production files and the main deployment workflow are not altered by this PR. This PR does not claim that email delivery, CRM integration, registration, payment, or production deployment has been tested or completed.
+The PR also adds the main domain's missing `api/csrf.php` and `api/lead.php` and updates the client-side acknowledgement to say accepted for processing (not delivered to the inbox). These endpoints need a real hosting acceptance test. The main deployment workflow is not changed. Neither website has been deployed by this PR.
+
+The GitHub QA workflow generates **two separate downloadable artifacts** after passing: the canonical main-site HOSTiQ ZIP and the business-site artifact. Do not upload either on top of another domain's Document Root. Email delivery, CRM integration, registration, payments and live hosting QA remain unverified.
