@@ -15,6 +15,14 @@ Endpoints on main: \`/api/csrf.php\`, \`/api/lead.php\`, \`/api/kids-preregister
 
 Request path: browser form → validated PHP session/CSRF → Pipedrive Person (v2) → Pipedrive Lead (v1) → linked Lead Note → success reference. Retries reuse state for up to 7 days to prevent duplicates. If CRM is not configured or fails, return 503 and show an honest error; no false confirmation. Note completion is part of success.
 
+### Simple cPanel setup (no environment-variable support required)
+1. In HOSTiQ File Manager, find the domain Document Root. Go **one directory above it** (home directory, not a public web directory).
+2. Create the private file \`.zmg-pipedrive.token\` containing **only** the Pipedrive API token (no quotes, no PHP code). Set permissions to \`0600\`.
+3. Both Main and Business will read this file if their Document Roots share a parent directory. If they do not, create a private token file separately above each Document Root.
+4. Never place the token file inside \`public_html\`, any publicly accessible subfolder, GitHub, or the deployment ZIP.
+5. From the Pipedrive account obtain the token under Personal preferences → API. Rotate it immediately if it appears in chat, screenshots or logs.
+6. Verify PHP curl and secure HTTPS egress; submit one **authorised, non-minor** test record and inspect the created Person, Lead and Note in the CRM. Delete the test data after validation.
+
 Requires PHP 8+ with extensions \`curl\` and \`json\`, HTTPS, writable private system temporary directory and outbound connections to \`https://api.pipedrive.com\`. **Verify** extension, environment injection and external HTTP access on HOSTiQ. Read-only testing should not submit real contacts.
 
 References:
@@ -57,3 +65,9 @@ Only collect the adult applicant name, email, optional phone, participant age (n
 ## Actual readiness
 Source: implemented; request validation: implemented; Pipedrive authenticated API: coded.
 Acceptance is **pending** on server token, real end-to-end lead verification, tested deletion process, legal review and browser workflow passing. No real registration has been completed by this change.
+
+## Curriculum references (design basis, not endorsements)
+- UNESCO AI Competency Framework for Students (2024): human-centred mindset, ethics, AI techniques/applications and AI system design. https://www.unesco.org/en/articles/ai-competency-framework-students
+- European Commission EntreComp: Ideas & Opportunities, Resources, Into Action. https://joint-research-centre.ec.europa.eu/scientific-activities/key-competences-lifelong-learning/entrecomp-entrepreneurship-competence-framework_en
+- European Commission DigComp: information/data, communication, content creation, safety and problem solving. https://joint-research-centre.ec.europa.eu/oldpage-digcomp/digcomp-framework_en
+These frameworks informed curriculum design; ZaMaGui does not claim certification or affiliation.
