@@ -45,7 +45,7 @@ jobs:
           node --check assets/kids-2027.js
           node --check business-site/assets/site.js
           cmp api/_crm.php business-site/api/_crm.php
-          python3 -m py_compile ops/build-kids-2027-patches.py
+          python3 -m py_compile ops/build-kids-2027-patches.py ops/deploy-kids-2027-ftps.py
           python3 - <<'PY'
           from pathlib import Path
           for p in ['kids-2027.html','ru/kids-2027.html','en/kids-2027.html']:
@@ -59,6 +59,10 @@ jobs:
           PY
       - name: Build independent release archives
         run: python3 ops/build-kids-2027-patches.py
+      - name: Dry-run validated root-specific deployment archives
+        run: |
+          python3 ops/deploy-kids-2027-ftps.py --target main --archive dist/kids-2027/zamagui-kids-2027-main-patch.zip --backup /tmp/zmg-main-backup.zip --dry-run
+          python3 ops/deploy-kids-2027-ftps.py --target business --archive dist/kids-2027/zamagui-kids-2027-business-patch.zip --backup /tmp/zmg-business-backup.zip --dry-run
       - name: Install Playwright runner
         run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @playwright/test@1.64.1
       - name: Start isolated PHP server
