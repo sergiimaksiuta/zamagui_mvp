@@ -8,6 +8,7 @@ targets={
   'kids.html','ru/kids.html','en/kids.html',
   'kids-2027.html','ru/kids-2027.html','en/kids-2027.html',
   'assets/kids-2027.css','assets/kids-2027.js',
+  'sitemap.xml',
   'api/.htaccess','api/_crm.php','api/csrf.php','api/lead.php','api/kids-preregister.php'
  ],
  'business':[
