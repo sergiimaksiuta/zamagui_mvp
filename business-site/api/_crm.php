@@ -23,6 +23,17 @@ function zmg_crm_request(string $path, array $payload, string $token): array {
 }
 function zmg_crm_capture(array $lead): array {
     $token=trim((string)(getenv('ZMG_PIPEDRIVE_API_TOKEN')?:''));
+    if ($token==='') {
+        $docroot=realpath((string)($_SERVER['DOCUMENT_ROOT']??''));
+        if ($docroot!==false) {
+            // cPanel alternative: private token file one level ABOVE the domain Document Root.
+            $private=dirname($docroot).'/.zmg-pipedrive.token';
+            $perms=@fileperms($private);
+            if (is_file($private)&&is_readable($private)&&$perms!==false&&(($perms&0077)===0)) {
+                $token=trim((string)file_get_contents($private));
+            }
+        }
+    }
     if ($token==='') throw new RuntimeException('crm_not_configured');
     $email=strtolower(trim((string)$lead['email']));
     $name=trim((string)$lead['name']);
