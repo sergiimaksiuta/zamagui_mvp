@@ -28,9 +28,9 @@ function select(nextC,nextD){
  cohort=nextC;duration=nextD;cInput.value=cohort;dInput.value=duration;
  root.querySelectorAll('[data-cohort-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cohortButton===cohort)));
  root.querySelectorAll('[data-duration-button]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.durationButton===duration)));
- root.querySelectorAll('[data-only-year2]').forEach(node=>node.hidden=duration==='12');
  root.querySelectorAll('[data-school]').forEach(node=>node.hidden=cohort!=='school-12-16');
  root.querySelectorAll('[data-student]').forEach(node=>node.hidden=cohort!=='student-17-22');
+ root.querySelectorAll('[data-only-year2]').forEach(node=>node.hidden=node.hidden||duration==='12');
  root.querySelector('#z27-choice-label').textContent=(cohort==='school-12-16'?t.school:t.student)+' · '+(duration==='12'?t.one:t.two);
  updateAge();
 }
