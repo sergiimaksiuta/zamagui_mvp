@@ -46,6 +46,28 @@ jobs:
           print(f"Required files validated: {len(required)}")
           PY
 
+      - name: PHP syntax and CSRF contract smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y php-cli
+          php -l api/csrf.php
+          php -l api/lead.php
+          php -l business-site/api/lead.php
+          php -S 127.0.0.1:8181 -t . >/tmp/zmg-php-test.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:8181/api/csrf.php -c /tmp/zmg-cookies -o /tmp/zmg-csrf.json; then break; fi
+            sleep 1
+          done
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/zmg-csrf.json'))
+          assert data['ok'] and len(data['csrf_token']) == 64
+          print('CSRF endpoint contract OK')
+          PY
+          code=$(curl -sS -o /tmp/zmg-reject.json -w '%{http_code}' -b /tmp/zmg-cookies -X POST -d 'csrf_token=wrong' http://127.0.0.1:8181/api/lead.php)
+          test "$code" = "403"
       - name: Validate all tracked JSON files
         shell: bash
         run: |
