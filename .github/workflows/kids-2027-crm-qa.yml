@@ -1,0 +1,88 @@
+name: ZaMaGui Kids 2027 + CRM — QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'kids-2027.html'
+      - 'ru/kids-2027.html'
+      - 'en/kids-2027.html'
+      - 'kids.html'
+      - 'ru/kids.html'
+      - 'en/kids.html'
+      - 'assets/kids-2027.*'
+      - 'api/**'
+      - 'business-site/api/**'
+      - 'business-site/assets/site.js'
+      - 'e2e/kids-2027*'
+      - 'ops/build-kids-2027-patches.py'
+      - '.github/workflows/kids-2027-crm-qa.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  kids:
+    name: PHP + CSS + UK/RU/EN responsive and registration tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PHP CLI with cURL
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq php-cli php-curl
+      - name: Check PHP, JS, CRM parity and pages
+        run: |
+          set -euo pipefail
+          for f in api/*.php business-site/api/*.php; do php -l "$f"; done
+          node --check assets/kids-2027.js
+          node --check business-site/assets/site.js
+          cmp api/_crm.php business-site/api/_crm.php
+          python3 -m py_compile ops/build-kids-2027-patches.py
+          python3 - <<'PY'
+          from pathlib import Path
+          for p in ['kids-2027.html','ru/kids-2027.html','en/kids-2027.html']:
+            s=Path(p).read_text(encoding='utf8')
+            assert '<form' in s and 'kids-preregister.php' in s
+            assert '/assets/approved/kids-light.webp' in s
+            assert '15.01' in s or '15 January' in s or '15 січня' in s or '15 января' in s
+          assert 'Require all denied' in Path('api/.htaccess').read_text()
+          assert 'Require all denied' in Path('business-site/api/.htaccess').read_text()
+          print('3 languages, original images and secured PHP: PASS')
+          PY
+      - name: Build independent release archives
+        run: python3 ops/build-kids-2027-patches.py
+      - name: Install Playwright runner
+        run: npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund @playwright/test@1.64.1
+      - name: Start isolated PHP server
+        run: |
+          php -S 127.0.0.1:4179 -t . >/tmp/kids-2027.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4179/api/csrf.php >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/kids-2027.log
+          exit 1
+      - name: Execute real browser scenarios, mock CRM only for UI result states
+        run: npx playwright test --config=e2e/kids-2027.config.cjs
+      - name: Publish the two verified ZIP patches
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zamagui-kids-2027-main-business-release
+          path: dist/kids-2027/*.zip
+          if-no-files-found: error
+          retention-days: 14
+      - name: Store failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zamagui-kids-2027-browser-failures
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
