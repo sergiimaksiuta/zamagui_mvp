@@ -44,6 +44,14 @@ jobs:
           exit 1
       - name: Responsive UK RU EN QA
         run: npx playwright test --config=e2e/business.config.cjs
+      - name: Package tested business site as downloadable artifact
+        if: success()
+        uses: actions/upload-artifact@v5
+        with:
+          name: zamagui-business-production-candidate
+          path: dist/business-site/
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload failed browser evidence
         if: failure()
         uses: actions/upload-artifact@v5
