@@ -24,6 +24,9 @@ permissions:
 jobs:
   kids:
     name: PHP + CSS + UK/RU/EN responsive and registration tests
+    defaults:
+      run:
+        shell: bash
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     container:
