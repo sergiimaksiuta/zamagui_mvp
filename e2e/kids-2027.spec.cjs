@@ -14,9 +14,9 @@ for(const [lang,path] of locales)for(const width of widths){
   await expect(page.locator('[name=cohort]')).toHaveValue('student-17-22');
   await page.locator('[name=age]').selectOption('17');
   await expect(page.locator('[name=role]')).toHaveValue('guardian');
-  await expect(page.locator('[name=role] option[value=self]')).toBeDisabled();
+  expect(await page.locator('[name=role] option[value=self]').evaluate(e=>e.disabled)).toBe(true);
   await page.locator('[name=age]').selectOption('19');
-  await expect(page.locator('[name=role] option[value=self]')).toBeEnabled();
+  expect(await page.locator('[name=role] option[value=self]').evaluate(e=>e.disabled)).toBe(false);
   for(const theme of ['light','dark']){
    await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
    const s=await page.evaluate(()=>[document.documentElement.scrollWidth,window.innerWidth]);
