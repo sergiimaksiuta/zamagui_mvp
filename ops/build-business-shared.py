@@ -23,6 +23,7 @@ def canonical_header():
 def header_for(template,lang):
     t=re.sub(r'href="/(?!/)([^"]*)"',lambda m:'href="https://zamagui.com/'+m.group(1)+'"',template)
     t=t.replace('href="https://zamagui.com/contact.html"',f'href="/{lang}/contact/"')
+    t=t.replace('src="/assets/brand.svg"','src="/assets/zmg-shared/brand.svg"')
     t=re.sub(r'(<option\s+)(selected=""\s+)?(value="(?:uk|ru|en)")',
        lambda m:m.group(1)+('selected="" ' if m.group(3)==f'value="{lang}"' else '')+m.group(3),t)
     for old,new in zip(TRANSLATIONS["uk"],TRANSLATIONS[lang]):
