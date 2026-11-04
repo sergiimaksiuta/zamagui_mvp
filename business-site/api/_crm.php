@@ -40,7 +40,7 @@ function zmg_crm_capture(array $lead): array {
         rewind($lock);$current=stream_get_contents($lock);
         $state=json_decode((string)$current,true);
         if (!is_array($state)||($state['time']??0)<time()-86400*7) $state=['time'=>time()];
-        if (!empty($state['lead_id'])) return ['ref'=>$ref,'id'=>$state['lead_id'],'duplicate'=>true];
+        $wasExisting=!empty($state['lead_id']);
         if (empty($state['person_id'])) {
             $person=['name'=>$name];
             if ($email!=='')$person['emails']=[['value'=>$email,'primary'=>true]];
@@ -51,16 +51,20 @@ function zmg_crm_capture(array $lead): array {
             $state['person_id']=$personId;
             rewind($lock);ftruncate($lock,0);fwrite($lock,json_encode($state));fflush($lock);
         }
-        $res=zmg_crm_request('/api/v1/leads',['title'=>$title,'person_id'=>(int)$state['person_id']],$token);
-        $leadId=(string)($res['id']??'');
-        if ($leadId==='')throw new RuntimeException('crm_lead_missing');
-        $state['lead_id']=$leadId;
-        rewind($lock);ftruncate($lock,0);fwrite($lock,json_encode($state));fflush($lock);
-        if ($body!=='') {
-            $note=htmlspecialchars($body,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
-            try { zmg_crm_request('/api/v1/notes',['lead_id'=>$leadId,'content'=>nl2br($note,false)],$token); }
-            catch(Throwable $e) { /* Lead is accepted; notes can be manually enriched. */ }
+        if (empty($state['lead_id'])) {
+            $res=zmg_crm_request('/api/v1/leads',['title'=>$title,'person_id'=>(int)$state['person_id']],$token);
+            $leadId=(string)($res['id']??'');
+            if ($leadId==='')throw new RuntimeException('crm_lead_missing');
+            $state['lead_id']=$leadId;
+            rewind($lock);ftruncate($lock,0);fwrite($lock,json_encode($state));fflush($lock);
         }
-        return ['ref'=>$ref,'id'=>$leadId,'duplicate'=>false];
+        $leadId=(string)$state['lead_id'];
+        if ($body!==''&&empty($state['note_saved'])) {
+            $note=htmlspecialchars($body,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+            zmg_crm_request('/api/v1/notes',['lead_id'=>$leadId,'content'=>nl2br($note,false)],$token);
+            $state['note_saved']=true;
+            rewind($lock);ftruncate($lock,0);fwrite($lock,json_encode($state));fflush($lock);
+        }
+        return ['ref'=>$ref,'id'=>$leadId,'duplicate'=>$wasExisting];
     } finally { flock($lock,LOCK_UN);fclose($lock); }
 }
