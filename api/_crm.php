@@ -28,10 +28,10 @@ function zmg_crm_capture(array $lead): array {
     $name=trim((string)$lead['name']);
     $title=trim((string)$lead['title']);
     $body=trim((string)($lead['note']??''));
-    if (!filter_var($email,FILTER_VALIDATE_EMAIL)||strlen($title)>240||strlen($title)<4) throw new RuntimeException('crm_validation');
     $phone=trim((string)($lead['phone']??''));
-    $ref=substr(hash_hmac('sha256', $email.'|'.$title, $token),0,18);
-    $key=hash_hmac('sha256','zmg-crm-'.$email.'|'.$title,$token);
+    if (($email===''&&$phone==='')||($email!==''&&!filter_var($email,FILTER_VALIDATE_EMAIL))||strlen($title)>240||strlen($title)<4) throw new RuntimeException('crm_validation');
+    $ref=substr(hash_hmac('sha256', ($email!==''?$email:$phone).'|'.$title, $token),0,18);
+    $key=hash_hmac('sha256','zmg-crm-'.($email!==''?$email:$phone).'|'.$title,$token);
     $file=sys_get_temp_dir().'/zmg_crm_'.substr($key,0,48).'.json';
     $lock=@fopen($file,'c+');
     if (!$lock||!flock($lock,LOCK_EX)) throw new RuntimeException('crm_lock');
@@ -42,7 +42,8 @@ function zmg_crm_capture(array $lead): array {
         if (!is_array($state)||($state['time']??0)<time()-86400*7) $state=['time'=>time()];
         if (!empty($state['lead_id'])) return ['ref'=>$ref,'id'=>$state['lead_id'],'duplicate'=>true];
         if (empty($state['person_id'])) {
-            $person=['name'=>$name,'emails'=>[['value'=>$email,'primary'=>true]]];
+            $person=['name'=>$name];
+            if ($email!=='')$person['emails']=[['value'=>$email,'primary'=>true]];
             if ($phone!=='')$person['phones']=[['value'=>$phone,'primary'=>true]];
             $res=zmg_crm_request('/api/v2/persons',$person,$token);
             $personId=(int)($res['id']??0);
