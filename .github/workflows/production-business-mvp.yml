@@ -1,0 +1,41 @@
+name: ZaMaGui business | MVP production deploy
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_BUSINESS to publish business.zamagui.com'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: zamagui-business-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'DEPLOY_BUSINESS'
+    runs-on: ubuntu-24.04
+    environment: business-production
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build exact production ZIP and validate
+        run: |
+          set -euo pipefail
+          python3 ops/build-business-shared.py --in-place
+          python3 ops/build-production-archives.py --target business
+          python3 ops/deploy-ftps-archive.py --archive dist/deploy/zamagui-business.zip --domain business.zamagui.com --backup dist/deploy/backup-business.zip --dry-run
+      - name: Publish with root proof, backup, smoke tests and rollback
+        env:
+          FTPS_HOST: ${{ secrets.BUSINESS_FTPS_HOST }}
+          FTPS_USER: ${{ secrets.BUSINESS_FTPS_USER }}
+          FTPS_PASSWORD: ${{ secrets.BUSINESS_FTPS_PASSWORD }}
+        run: python3 ops/deploy-ftps-archive.py --archive dist/deploy/zamagui-business.zip --domain business.zamagui.com --backup dist/deploy/backup-business.zip
+      - name: Preserve release and recovery archives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: business-mvp-${{ github.run_id }}
+          path: dist/deploy/*.zip
+          if-no-files-found: warn
+          retention-days: 14
