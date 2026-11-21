@@ -49,6 +49,21 @@ jobs:
           cat /tmp/zamagui-http.log
           exit 1
 
+      - name: Start isolated Business site
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory business-site > /tmp/zamagui-business-http.log 2>&1 &
+          for i in $(seq 1 25); do
+            if curl -fsS http://127.0.0.1:4174/ru/ >/dev/null; then
+              echo 'Local Business test site ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/zamagui-business-http.log
+          exit 1
+
       - name: Run browser tests
         shell: bash
         run: |
