@@ -43,6 +43,7 @@ for (const locale of locales) {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.locator('.theme-toggle').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await page.screenshot({ path: 'test-results/business-' + locale + '-desktop.png', fullPage: true, animations: 'disabled' });
     expect(errors).toEqual([]);
   });
 
@@ -57,6 +58,7 @@ for (const locale of locales) {
     await expect(page.locator('#business-nav')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await page.screenshot({ path: 'test-results/business-' + locale + '-mobile.png', fullPage: true, animations: 'disabled' });
   });
 
   test('Business contact: form response stays in locale ' + locale, async ({ page }) => {
