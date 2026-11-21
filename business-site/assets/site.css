@@ -35,7 +35,7 @@ img{max-width:100%;display:block}
 .top{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--line);background:var(--bg);box-shadow:0 5px 20px rgba(20,40,75,.025)}
 .top .wrap{min-height:84px;display:flex;align-items:center;gap:clamp(12px,1.8vw,28px)}
 .logo{font-size:25px;line-height:1.15;letter-spacing:-.06em;font-weight:850;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:baseline;gap:7px;flex:0 0 auto}
-.logo::before{content:"✦";font-size:24px;color:var(--blue);line-height:1}
+.logo::before{content:"";display:inline-block;flex:0 0 27px;width:27px;height:27px;background:url("https://zamagui.com/assets/brand.svg") center/contain no-repeat}
 .logo small{font-size:12px;letter-spacing:.01em;font-weight:750;color:var(--blue)}
 .menu{display:flex;align-items:center;flex:1 1 auto;justify-content:flex-end;gap:clamp(8px,1.15vw,18px);min-width:0}
 .menu a{font-size:12px;line-height:1.35;font-weight:720;white-space:nowrap;text-decoration:none;color:var(--muted);padding:12px 0;border-bottom:2px solid transparent}
@@ -183,3 +183,11 @@ p{color:var(--muted)}
 .cta-panel a{color:#d9ff4b;font-size:13px;font-weight:800;text-decoration:none}
 .cta-panel a:hover{text-decoration:underline}
 @media(max-width:680px){.section-process .flow div{min-height:190px;padding:22px}.cta-panel{min-height:240px;padding:25px}.business-home .hero h1 span{border-radius:7px}}
+
+/* Accessibility and layout-safe refinements */
+.hero-art{margin:0}
+.card-media--growth{background:#e9f0ff}
+.card-media--kids{background:#faf8e3}
+.card-media--guild{background:#eff9e6}
+.card-media--projects{background:#fff4e2}
+@media(max-width:680px){.hero-grid .hero-copy{min-width:0}.hero-art img{width:100%;height:auto}}
