@@ -74,6 +74,12 @@ jobs:
           done < <(find assets -type f -name '*.js' -print0)
           echo "JS syntax validated: $count files"
 
+      - name: Validate Business directory localization and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash scripts/check-business.sh
+
       - name: Block obvious secret files from Git
         shell: bash
         run: |
