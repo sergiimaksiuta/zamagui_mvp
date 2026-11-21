@@ -2,7 +2,7 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: __dirname,
-  testMatch: '**/smoke.spec.cjs',
+  testMatch: ['**/smoke.spec.cjs', '**/business.spec.cjs'],
   timeout: 30_000,
   expect: { timeout: 7_000 },
   workers: 1,
