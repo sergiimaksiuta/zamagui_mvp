@@ -11,7 +11,7 @@ Status: **DRAFT — DO NOT MERGE OR DEPLOY** until the verified V11 FULL release
 - 95 logical routes × 2 locales = 190 PHP-SSR pages; 190/190 local route checks PASS.
 - Image asset decode 132/132 PASS; PHP 9/9 syntax PASS; JS syntax PASS.
 - Navigation: five top-level groups, one SSR source for desktop/mobile/context, same deep route UK↔EN.
-- V11 patch includes 33 changed/new files; strict V10 SHA guard; patch-over-baseline exact FULL file parity and rollback exact V10 PASS.
+- V11 patch includes 40 changed/new files; strict V10 SHA guard; patch-over-baseline exact FULL file parity and rollback exact V10 PASS.
 - Production-target archive strips staging noindex/canonical only where appropriate, retains noindex for application forms.
 
 ## Owner import workflow (must happen before PR review)
